@@ -78,6 +78,11 @@ C
 C        RDBE and RDBE2 digital backend, including VLBA
 C
          CALL BBCRDBE( KS )
+      ELSE IF( DAR(ISETSTA(KS))(1:4) .EQ. 'VNDA' ) THEN
+C
+C        VNDA digital backend, including VLBA
+C
+         CALL BBCVNDA( KS )
 C
       ELSE IF( DAR(ISETSTA(KS)) .EQ. 'WIDAR' ) THEN
 C

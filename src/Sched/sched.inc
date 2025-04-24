@@ -74,7 +74,7 @@ C     MSET needs to be large enough for one setup group per frequency
 C     group per station.  The number is driven by wideband VLBA 
 C     single dish testing.
 C
-      PARAMETER     (MAXSCN=4000)
+      PARAMETER     (MAXSCN=20000)
       PARAMETER     (MAXSTA=40)
       PARAMETER     (MSET  =400+5*MAXSTA)
 C
@@ -457,13 +457,14 @@ C                      MISSING implies can plot, but not make files.
 C
       INTEGER          LINEPG
       INTEGER          ORIGEN(MAXSCN)
-      LOGICAL          PLOT, PUBPLOT, DEBUG, OVERWRIT 
+      LOGICAL          PLOT, PUBPLOT, DEBUG, OVERWRIT, TWOVEX
       LOGICAL          DOVEX, VEXTEST, DOMKA, DOVSOP, MISSING, MOVING
-      LOGICAL          NOSET, COVERLET, AUTOPEAK, PKWATCH
-      LOGICAL          OVERRIDE, READLOG, DODOWN(MAXSCN)
+      LOGICAL          NOSET, COVERLET, AUTOPEAK, PKWATCH, SYNL404
+      LOGICAL          OVERRIDE, READLOG, DODOWN(MAXSCN), MAKECRD
       CHARACTER        MSGTXT*256, SUMITEM(10)*8, DOSTA*8
       CHARACTER        EPHFILE*80, FREQFILE*80, FREQVER*20
       CHARACTER        PEAKFILE*80, LOGFILE*80, MSGFILE*80
+      CHARACTER        VEXVRSN*4
       DOUBLE PRECISION FREQLIST(2), PRECDATE
 C
 C                      Schedule optimization and plotting:
@@ -498,16 +499,16 @@ C
       COMMON  /SCHCON/ FREQLIST, PRECDATE, OPDUR, LINEPG, ORIGEN, PLOT, 
      1                 PUBPLOT, DEBUG, OVERWRIT, DOVEX, VEXTEST, DOMKA, 
      2                 DOVSOP, MISSING, MOVING, NOSET, COVERLET,
-     3                 AUTOPEAK, PKWATCH, OVERRIDE, READLOG, DODOWN,
+     3                 AUTOPEAK, PKWATCH, OVERRIDE, READLOG, DODOWN, 
      4                 OPMINEL, OPTSLEW, OPTLOWT, OPSLEWWT, OPSLEWTI,
      5                 OPHLIMWT, OPHLIMTI, OPHMAXDT, OPMINSEP, OPHA, 
      6                 OPHAWID, OPHAWT, OPMIAN, OPSKIP, OPELPRIO, 
      7                 OPMISS, OPPRTLEV, OPNOSUB, TAPESYNC, MAPLIM,
      8                 GRIDNR, GRIDNT, GRIDMIN, GRIDMAX, GRIDW0, 
      9                 GRIDSTEP, GRIDUSED, GRIDVLA, NMFS, MFSRAT,
-     A                 DOTSIZE, RINGSIZE, LONMIN, LONMAX, 
-     B                 LATMIN, LATMAX, LATMID,
-     C                 NTICKS, LINESZ, LABELSZ, COLIND, MOVEDS
+     A                 DOTSIZE, RINGSIZE, LONMIN, LONMAX, VEXVRSN,
+     B                 LATMIN, LATMAX, LATMID, SYNL404, MAKECRD,
+     C                 NTICKS, LINESZ, LABELSZ, COLIND, MOVEDS, TWOVEX
       COMMON  /SCHSCO/ MSGTXT, SUMITEM, DOSTA, EPHFILE, 
      1                 FREQFILE, FREQVER, PEAKFILE, LOGFILE, MSGFILE,
      2                 OPHASTA, OPTMODE, GRIDMEAS
@@ -626,7 +627,7 @@ C
       LOGICAL          LST, MARK2, VLBITP, VLAONLY, NOTAPE, CONFIG
       LOGICAL          TANTS1(MAXSTA), TANTS2(MAXSTA), FUZZY, GOTVLBA
       LOGICAL          GOTPREEM, WRAP24
-      CHARACTER        EXPT*72, EXPCODE*8
+      CHARACTER        EXPT*72, EXPCODE*16
 C
 C                      Calculated items:
 C

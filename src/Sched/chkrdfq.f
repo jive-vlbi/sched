@@ -291,8 +291,35 @@ C           bit of slop (about 100 mHz).  This will be treated as
 C           an error and will abort SCHED - the call to ERROR is at
 C           the end of this routine.
 C
-            IF( DMOD( BBCFREQ(ICH) + 1.D-7, 0.015625D0 ) .GT. 2.D-7
-     1          .AND. NFWARN .LE. 1 ) THEN
+C        April 2024 Change: Accept 10 kHz tuning for VNDA support if 
+C        MODETEST is true. This is to not cause an issue with 15.625kHz
+C        tuning used for RDBE.
+C            
+            IF( MODETEST(KS) ) THEN
+               IF( DMOD( BBCFREQ(ICH) + 1.D-7, 0.010000D0 ) 
+     1          .GT. 2.D-7 .AND. NFWARN .LE. 1 ) THEN
+                  MSGTXT = ' '
+                  WRITE( MSGTXT, '( 3A )' ) 'CHKRDFQ:  ',
+     1             ' BBSYN for the RDBE_DDC must be an even multiple',
+     2              ' of 10.0 kHz.'
+                  CALL WLOG( 1, MSGTXT )
+                  MSGTXT = ' '
+                  WRITE( MSGTXT, '( 3A,  A, I3, F15.6 )' ) 
+     1               '          ',
+     2            ' Found station station/setup/chan/frequency : ', 
+     3               SETSTA(1,KS), SETNAME(KS)(1:LEN1(SETNAME(KS))),
+     4               ICH, BBCFREQ(ICH)
+                  CALL WLOG( 1, MSGTXT )
+                  CALL WLOG( 1, '           ' // SETNAME(KS) )
+                  IF( NFWARN .GE. 1 ) THEN
+                   MSGTXT = 'CHKRDFQ:   Further warnings suppressed '
+                     CALL WLOG( 1, MSGTXT )                     
+                  END IF                  
+                  NFWARN = NFWARN + 1
+                  SHOWID = .TRUE.
+               END IF
+            ELSE IF( DMOD( BBCFREQ(ICH) + 1.D-7, 0.015625D0 ) 
+     1          .GT. 2.D-7 .AND. NFWARN .LE. 1 ) THEN
                MSGTXT = ' '
                WRITE( MSGTXT, '( 3A )' ) 'CHKRDFQ:  ',
      1           ' BBSYN for the RDBE_DDC must be an even multiple',
@@ -511,11 +538,16 @@ C
          CALL WLOG( 1, MSGTXT )
       END IF
 C
-C     Make the non-multiple of 15.625 warning fatal.
+C     Make the non-multiple of 15.625 or 10.0 warning fatal.
 C
       IF( NFWARN .GT. 0 ) THEN
-         CALL ERROR( 'CHKRDFQ:  Use freqeuenies that are multiples '//
-     1       'of 15.625 kHz.' )
+         IF( MODETEST(KS) ) THEN
+            CALL ERROR( 'CHKRDFQ:  Use frequencies that are '//
+     1          'multiples of 10.0 kHz.' )
+         ELSE
+            CALL ERROR( 'CHKRDFQ:  Use frequencies that are '//
+     1          'multiples of 15.625 kHz.' )
+         END IF
       END IF
 C
       IF( DEBUG ) CALL WLOG( 0, 'CHKRDFQ: Ending' )

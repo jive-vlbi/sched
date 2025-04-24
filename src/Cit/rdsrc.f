@@ -52,7 +52,7 @@ C
 C     Internal variables.
 C
       INTEGER        IER, VLBOPE, I, I1
-C     REAL           CONT
+C      REAL           CONT
       REAL*8         CONT
       REAL*8         BLANK1, BLANK8, NONAME
       LOGICAL        FOPEN
