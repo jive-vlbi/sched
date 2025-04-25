@@ -257,8 +257,6 @@ RM = /bin/rm
 all:
 	cd Vex; /bin/rm sched.inc; ln -s ../Sched/sched.inc sched.inc
 	cd Vex; /bin/rm schset.inc; ln -s ../Sched/schset.inc schset.inc
-	cd Vex2; /bin/rm sched2.inc; ln -s ../Sched/sched2.inc sched2.inc
-	cd Vex2; /bin/rm schset2.inc; ln -s ../Sched/schset2.inc schset2.inc
 	cd Plot; /bin/rm sched.inc; ln -s ../Sched/sched.inc sched.inc
 	cd Plot; /bin/rm srlist.inc; ln -s ../Sched/srlist.inc srlist.inc
 	cd PlotNRAO; /bin/rm sched.inc; ln -s ../Sched/sched.inc sched.inc
