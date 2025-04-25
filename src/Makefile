@@ -1,4 +1,4 @@
-# Temporary makefile for SCHED made by configureLinuxSpice64gfortran
+# Temporary makefile for SCHED made by configureLinux
 #
 # Makefile.master is the template makefile.  It is not viable as it stands
 # but can be made viable by uncommenting various lines as described in
@@ -46,7 +46,7 @@
 #    With gfortran you will get lots of warnings.  Most are about string
 #    truncation and unused call arguments.  They should be benign.
 
- FC = gfortran -Wall -fimplicit-none -fno-backslash
+ FC = gfortran -Wall -Wimplicit -fno-backslash -fbounds-check
 #FC = g77 -Wall -Wimplicit -fno-backslash # g77 (Linux, OS X, and others)
 #FC = f77 -C -u                       # SUN  IBM/AIX
 #FC = ifort -u -c -warn unused -warn declarations # Linux with Intel compiler.
@@ -67,7 +67,7 @@
 #  are being used to make portable binaries.  With modern systems, they
 #  seem to cause problems.
 
- XLD = -L/usr/lib64 -lX11
+ XLD = -lX11
 #XLD =                                         # Should work on many systems.
                                                #  Use for pgplot stub.
 #XLD = -lX11		                       # X11 libraries, if needed
@@ -126,7 +126,7 @@ LPGPLOT = $(PGPLOT_DIR)
 # For linker:  (LPGPLOT not needed for all).
 #   If there are missing items, consider adding -lz
 
- LDPGPLOT = -L$(LPGPLOT) -lpgplot
+ LDPGPLOT = -lpgplot -lpng
 
 #  Some options - will be set in the configure scripts, but you can change:
 #LDPGPLOT = -lpgplot -lpng       # pgplot, png, z in the standard load path.
@@ -182,8 +182,8 @@ LPGPLOT = $(PGPLOT_DIR)
 #SATLD =                              # Link option for stub
 
 #      For the configure scripts:
- SAT_SRCS = $(wildcard Sat/*.f)
- SATLD = ../lib/LINUX64GFORTRAN/spicelib.a ../lib/LINUX64GFORTRAN/support.a -lm
+ SAT_SRCS = $(wildcard Satstub/*.f)
+ SATLD = 
 
 #-----  Note  ------
 
@@ -250,7 +250,7 @@ IBMAIX_OBJS = $(IBMAIX_FSRCS:.f=.o) $(IBMAIX_CSRCS:.c=.o) $(UNIX_OBJS)
 
 ARCH_OBJS = $($(ARCH)_OBJS)
 
-BINDIR = ../bin/linuxsp64gf
+BINDIR = ../bin/linux64gf
 CP = /bin/cp
 RM = /bin/rm
 
@@ -268,10 +268,10 @@ all:
 	cd Sched; /bin/rm plot.inc; ln -s ../Plot/plot.inc plot.inc
 	cd Sched; /bin/rm vxlink.inc; ln -s ../Vex/vxlink.inc vxlink.inc
 	cd Sched; /bin/rm vxlink2.inc; ln -s ../Vex2/vxlink2.inc vxlink2.inc
-	cd Sched/Freq/VLBA; $(MAKE) "FC=$(FC)"
 	cd Cit; $(MAKE) "FC=$(FC)"
 	cd Sla; $(MAKE) "FC=$(FC)"
 	cd Sched; $(MAKE) "FC=$(FC)"
+	cd Sched/Freq/VLBA; $(MAKE) "FC=$(FC)"
 	cd Jpl; $(MAKE) "FC=$(FC)"
 	cd Jplstub; $(MAKE) "FC=$(FC)"
 	cd Sat; $(MAKE) "FC=$(FC)"
