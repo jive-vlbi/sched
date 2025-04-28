@@ -43,25 +43,29 @@ C
 C        Grab the satellite number and output the name of the TLE
 C        file and the satellite number.  The satini routine checks
 C        that exactly one of satfile/tlefile contains 'NONE'.
-
+C
+C        Changed format for vex2 (April 2025):
+C             source_type = bsp;
+C             bsp_file_name = file name;
+C             bsp_object_id = object number;
+C
+C
          I = SATN (ISRC)
          IF( SATFILE(I)(1:4) .NE. 'NONE' ) THEN
-            WRITE( IVEX, '( 5x, "source_type = ", A, " : ", I8, ";" )')
-     1         SATFILE (I)(1:LEN1(SATFILE (I))),
-     2         SATNUM (I)
+            WRITE( IVEX, '( 5x, "source_type = bsp;" )')
             WRITE( IVEX, '( 5x, "bsp_file_name = ", A, ";" )')
      1         SATFILE (I)(1:LEN1(SATFILE (I)))
             WRITE( IVEX, '( 5x, "bsp_object_id = ", I8, ";" )')
      1         SATNUM (I)
          ELSE
-            WRITE( IVEX, '( 5x, "source_type = ", A, " : ", I8, ";" )')
-     1         TLEFILE (I)(1:LEN1(TLEFILE (I))),
-     2         SATNUM (I)
+            WRITE( IVEX, '( 5x, "source_type = bsp;" )')
             WRITE( IVEX, '( 5x, "bsp_file_name = ", A, ";" )')
      1         TLEFILE (I)(1:LEN1(TLEFILE (I)))
             WRITE( IVEX, '( 5x, "bsp_object_id = ", I8, ";" )')
      1         SATNUM (I)
          END IF
+      ELSE
+          WRITE( IVEX, '( 5x, "source_type = star;" )')
       END IF
 
 C
