@@ -242,9 +242,11 @@ C              This is here because there is a scan dependent argument
 C              in the INTENT.
 C
                IF( PHASING(ISCN) ) THEN
-                  WRITE( LINE, '( 4A, I3.3, A )' ) COM,
-     1                ' intent = ', QOT, 
-     2                'VLA:PHASE_SUBSCAN=', VLAPTIME(ISCN), QOT
+                  WRITE( LINE, '( 4X, A, A1, 1X, 2A, I3.3, A, 1X, A1,
+     1                     1X, A, 1X, A1 )' )   
+     2                ' intent = ', COL, QOT,
+     3                'VLA:PHASE_SUBSCAN=', VLAPTIME(ISCN), QOT,
+     4                  COL, 'True', SEP
                   WRITE( IVEX, '( A )' ) LINE(1:LEN1(LINE))
                   INPAGE = INPAGE + 1
                END IF

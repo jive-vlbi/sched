@@ -43,17 +43,29 @@ C
 C        Grab the satellite number and output the name of the TLE
 C        file and the satellite number.  The satini routine checks
 C        that exactly one of satfile/tlefile contains 'NONE'.
-
+C
+C        Changed format for vex2 (April 2025):
+C             source_type = bsp;
+C             bsp_file_name = file name;
+C             bsp_object_id = object number;
+C
+C
          I = SATN (ISRC)
          IF( SATFILE(I)(1:4) .NE. 'NONE' ) THEN
-            WRITE( IVEX, '( 5x, "source_type = ", A, " : ", I8, ";" )')
-     1         SATFILE (I)(1:LEN1(SATFILE (I))),
-     2         SATNUM (I)
+            WRITE( IVEX, '( 5x, "source_type = bsp;" )')
+            WRITE( IVEX, '( 5x, "bsp_file_name = ", A, ";" )')
+     1         SATFILE (I)(1:LEN1(SATFILE (I)))
+            WRITE( IVEX, '( 5x, "bsp_object_id = ", I8, ";" )')
+     1         SATNUM (I)
          ELSE
-            WRITE( IVEX, '( 5x, "source_type = ", A, " : ", I8, ";" )')
-     1         TLEFILE (I)(1:LEN1(TLEFILE (I))),
-     2         SATNUM (I)
+            WRITE( IVEX, '( 5x, "source_type = bsp;" )')
+            WRITE( IVEX, '( 5x, "bsp_file_name = ", A, ";" )')
+     1         TLEFILE (I)(1:LEN1(TLEFILE (I)))
+            WRITE( IVEX, '( 5x, "bsp_object_id = ", I8, ";" )')
+     1         SATNUM (I)
          END IF
+      ELSE
+          WRITE( IVEX, '( 5x, "source_type = star;" )')
       END IF
 
 C
@@ -87,45 +99,58 @@ C        Print the used coordinates, put others in comments,
 C        first J2000
 C        Dec. 12, 2008  RCW - changed to leave J2000 coordinate
 C        uncommented.
+C        April 28, 2025 Adriana Escobar - Remove coordinates 
+C        from bsp observations. Only comment J2000.
 C
-      STRRA = TFORM( RA2000(ISRC), 'T', 0, 2, 10, 'hms' ) 
-      STRDEC = TFORM( D2000(ISRC),  ' ', 1, 2, 9,  'd''"' )
-      CH1 = ' '
+      IF( SATEL(ISRC) ) THEN
+         STRRA = TFORM( RA2000(ISRC), 'T', 0, 2, 10, 'hms' ) 
+         STRDEC = TFORM( D2000(ISRC),  ' ', 1, 2, 9,  'd''"' )
+         CH1 = '*'
+         WRITE( IVEX, '( A1, 4X, A, A, A1, 1X, A, A, A1, 1X, 
+     1       A, A, A1 )' )
+     2       CH1, 'ra = ', STRRA(1:LEN1(STRRA)), 
+     3       SEP, 'dec = ', STRDEC(1:LEN1(STRDEC)),
+     4      SEP, 'ref_coord_frame = ', 'J2000', SEP 
+      ELSE
+         STRRA = TFORM( RA2000(ISRC), 'T', 0, 2, 10, 'hms' ) 
+         STRDEC = TFORM( D2000(ISRC),  ' ', 1, 2, 9,  'd''"' )
+         CH1 = ' '
 C      IF( C2000(ISRC) .NE. ' ' ) CH1 = ' '
-      WRITE( IVEX, '( A1, 4X, A, A, A1, 1X, A, A, A1, 1X, 
-     1    A, A, A1 )' )
-     2    CH1, 'ra = ', STRRA(1:LEN1(STRRA)), 
-     3    SEP, 'dec = ', STRDEC(1:LEN1(STRDEC)),
-     4    SEP, 'ref_coord_frame = ', 'J2000', SEP 
+         WRITE( IVEX, '( A1, 4X, A, A, A1, 1X, A, A, A1, 1X, 
+     1       A, A, A1 )' )
+     2       CH1, 'ra = ', STRRA(1:LEN1(STRRA)), 
+     3       SEP, 'dec = ', STRDEC(1:LEN1(STRDEC)),
+     4      SEP, 'ref_coord_frame = ', 'J2000', SEP 
          
 C
 C        next 1950....
 C
-      STRRA = TFORM( RA1950(ISRC), 'T', 0, 2, 10, 'hms' ) 
-      STRDEC = TFORM( D1950(ISRC),  ' ', 1, 2, 9, 'd''"' )
-      CH1 = '*'
+         STRRA = TFORM( RA1950(ISRC), 'T', 0, 2, 10, 'hms' ) 
+         STRDEC = TFORM( D1950(ISRC),  ' ', 1, 2, 9, 'd''"' )
+         CH1 = '*'
 C       IF( C1950(ISRC) .NE. ' ' ) CH1 = ' '
-      WRITE( IVEX, '( A1, 4X, A, A, A1, 1X, A, A, A1, 1X, 
-     1    A, A, A1 )' )
-     2    CH1, 'ra = ', STRRA(1:LEN1(STRRA)), 
-     3    SEP, 'dec = ', STRDEC(1:LEN1(STRDEC)),
-     4    SEP, 'ref_coord_frame = ', 'B1950', SEP
+         WRITE( IVEX, '( A1, 4X, A, A, A1, 1X, A, A, A1, 1X, 
+     1       A, A, A1 )' )
+     2       CH1, 'ra = ', STRRA(1:LEN1(STRRA)), 
+     3      SEP, 'dec = ', STRDEC(1:LEN1(STRDEC)),
+     4      SEP, 'ref_coord_frame = ', 'B1950', SEP
 C
 C           and last coordinates of DATE
 C
 C           June 19, 2009. RCW  Allow coordinates of date from user.
 C           J2000 version will be used internally and in the Vex file.
 C
-      STRRA = TFORM( RAP(ISRC), 'T', 0, 2, 10, 'hms' ) 
-      STRDEC = TFORM( DECP(ISRC),  ' ', 1, 2, 9, 'd''"' )
-      CH1 = '*'
+         STRRA = TFORM( RAP(ISRC), 'T', 0, 2, 10, 'hms' ) 
+         STRDEC = TFORM( DECP(ISRC),  ' ', 1, 2, 9, 'd''"' )
+         CH1 = '*'
 C      IF( CDATE(ISRC) .NE. ' ' ) 
 C     1    CALL ERRLOG('VXWRDT: coordinates of date not supported')
-      WRITE( IVEX, '( A1, 4X, A, A, A1, 1X, A, A, A1, 1X, 
-     1    A, A, A1 )' )
-     2    CH1, 'ra = ', STRRA(1:LEN1(STRRA)), 
-     3    SEP, 'dec = ', STRDEC(1:LEN1(STRDEC)),
-     4    SEP, 'ref_coord_frame = ', 'Date', SEP
+         WRITE( IVEX, '( A1, 4X, A, A, A1, 1X, A, A, A1, 1X, 
+     1       A, A, A1 )' )
+     2       CH1, 'ra = ', STRRA(1:LEN1(STRRA)), 
+     3       SEP, 'dec = ', STRDEC(1:LEN1(STRDEC)),
+     4       SEP, 'ref_coord_frame = ', 'Date', SEP
+      END IF
 C
 C     Worked on this Dec. 13, 2008.  RCW
 C     SCHED shifts the positions of sources subject to proper motion
