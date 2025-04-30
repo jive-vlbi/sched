@@ -21,8 +21,6 @@ class EndOfLineComment(str):
 
 sched_version = "5" # version of SCHED VEX writing routine
 
-skip_pointing_sector_start = {"GBT", "VLA", 'KVN'}
-
 block_separator = "*------------------------------------------------------"\
                   "------------------------\n"
 def write(output, vex_version="2.0", print_warnings=False):
@@ -973,8 +971,7 @@ def stations_block(vex_version, print_warnings):
                         ("antenna_motion", axes[1], 
                          "{:6.1f} deg/min".format(station.ax2rate),
                          "{} sec".format(int(station.tsettle))))
-            if (station.mount == "ALTAZ") and \
-               (station.station[:3] not in skip_pointing_sector_start):
+            if (station.mount == "ALTAZ"):
                 antenna += pointing_sectors(station, vex_version, 
                                             print_warnings)
             
@@ -1295,18 +1292,17 @@ def sched_block(scan_mode, vex_version, print_warnings):
                         media_position = ""
 
                     pointing_sector = ""
-                    if station.station[:3] not in skip_pointing_sector_start:
-                        zone = scan_sector(
-                            station, scan,
-                            station.az1[scan_index+scan_offset],
-                            station.el1[scan_index+scan_offset])
-                        # assumption here is that the zone name is the link name
-                        # according to comments in sched this is true in the
-                        # normal case, otherwise 3 zones have the same name,
-                        # no clue which one would be the one to pick
-                        # see Sched/wrapzone.f
-                        if zone is not None:
-                            pointing_sector = "&" + zone
+                    zone = scan_sector(
+                        station, scan,
+                        station.az1[scan_index+scan_offset],
+                        station.el1[scan_index+scan_offset])
+                    # assumption here is that the zone name is the link name
+                    # according to comments in sched this is true in the
+                    # normal case, otherwise 3 zones have the same name,
+                    # no clue which one would be the one to pick
+                    # see Sched/wrapzone.f
+                    if zone is not None:
+                        pointing_sector = "&" + zone
                         
                     pass_ = ""
                     if vex_version < "2" and station.disk == "LBADR":
