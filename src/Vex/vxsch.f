@@ -466,8 +466,8 @@ C                    for now, the 'options' field is always blank.
                      WRITE( LINE(LPOS:), '( 1X, A1 )' ) 
      1                    SEP
 C                     LPOS = LEN1(LINE) + 1
+                     WRITE( IVEX, '( A )' ) LINE(1:LEN1(LINE))
                   END IF
-                  WRITE( IVEX, '( A )' ) LINE(1:LEN1(LINE))
                END DO
             END IF
 C     
@@ -584,20 +584,9 @@ C
 C
 C                 Pointscr not implemented leave blank
 C                 Get the pointing sector from WRAPZONE.
-C                 But only do this for the VLBA for now until the EVN
-C                 etc are comfortable with having it here.  There is
-C                 a fear that some stations will pay attention to it,
-C                 but not have it properly implemented.
-CCC    rmc: all but GBT_VLBA, VLA27 for turning on PSC in oct/nov'15
+C                 Previously restricted to VLBA, applies to all from 2024-08-14
 C
-C                  IF( STANAME(ISTA)(1:4) .EQ. 'VLBA' ) THEN
-                  IF( (STANAME(ISTA)(1:3) .NE. 'GBT') .AND.
-     1                (STANAME(ISTA)(1:3) .NE. 'VLA') .AND.
-     1                (STANAME(ISTA)(1:3) .NE. 'KVN')       ) THEN
-                     CALL WRAPZONE( IVEX, ISCN, ISTA, ZONE )
-                  ELSE 
-                     ZONE = ' '
-                  END IF
+                  CALL WRAPZONE( IVEX, ISCN, ISTA, ZONE )
 C
                   LPOS = LEN1(LINE) + 1
                   WRITE( LINE(LPOS:LPOS+7), '( 1X, A5, 1X, A1 )' ) 

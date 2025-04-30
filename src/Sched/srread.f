@@ -27,7 +27,7 @@ C
 C
       INTEGER        ISTAT, RDSRC, KSRC, LEN1, IV, ERR
       INTEGER        INAME, I1, I2, ICH
-      REAL           CONT
+      REAL*8         CONT
       LOGICAL        GOTALL, SRUSED, EQWARN
       LOGICAL        READIT, KEEPIT, EPEQ
       CHARACTER      FILEUP*4, INFILE*80, CEQUINOX*5

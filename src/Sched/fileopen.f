@@ -61,25 +61,27 @@ C
          OVBA = .FALSE.
          OLOC = .FALSE.
 C
-         IF( ( CONTROL(STANUM(ISTA)) .EQ. 'VLBA' .OR.
-     1       VLBADAR(STANUM(ISTA)) ) .AND. .NOT. VLAONLY ) THEN
-            CRDTYPE = 'crd.'
-            WRITE( CRDFILE, '(A,A,A)' ) EXPCODE(1:LEN1(EXPCODE)), 
-     1            CRDTYPE, STCODE(STANUM(ISTA))
-            CALL DWCASE( CRDFILE )
-            INQUIRE( FILE=CRDFILE, EXIST=EXISTS )
-            IF( EXISTS .AND. OVERWRIT ) THEN
-               OPSTAT = 'OLD'
-            ELSE IF( EXISTS ) THEN
-               CALL WLOG( 1, 'FILEOPEN: '//CRDFILE//' already exists.' )
-               CALL ERRLOG( 'FILEOPEN: You need to delete old output '
-     1                // 'files or set OVERWRIT.' )
-            ELSE
-               OPSTAT = 'NEW'
+         IF( MAKECRD ) THEN
+            IF( ( CONTROL(STANUM(ISTA)) .EQ. 'VLBA' .OR.
+     1         VLBADAR(STANUM(ISTA)) ) .AND. .NOT. VLAONLY ) THEN
+               CRDTYPE = 'crd.'
+               WRITE( CRDFILE, '(A,A,A)' ) EXPCODE(1:LEN1(EXPCODE)), 
+     1               CRDTYPE, STCODE(STANUM(ISTA))
+               CALL DWCASE( CRDFILE )
+               INQUIRE( FILE=CRDFILE, EXIST=EXISTS )
+               IF( EXISTS .AND. OVERWRIT ) THEN
+                  OPSTAT = 'OLD'
+               ELSE IF( EXISTS ) THEN
+            CALL WLOG( 1, 'FILEOPEN: '//CRDFILE//' already exists.' )
+            CALL ERRLOG( 'FILEOPEN: You need to delete old output '
+     1                   // 'files or set OVERWRIT.' )
+               ELSE
+                  OPSTAT = 'NEW'
+               END IF
+               IOERR = VLBOPE( IUVBA, CRDFILE, 'TEXT', OPSTAT, OPTEXT )
+               IF( IOERR .NE. 1 ) CALL ERRLOG( OPTEXT )
+               OVBA = .TRUE.
             END IF
-            IOERR = VLBOPE( IUVBA, CRDFILE, 'TEXT', OPSTAT, OPTEXT )
-            IF( IOERR .NE. 1 ) CALL ERRLOG( OPTEXT )
-            OVBA = .TRUE.
          END IF
 C 
 C        Open other types of control files.

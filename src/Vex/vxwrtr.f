@@ -168,8 +168,20 @@ C                VDIF5032 is appropriate for RDBE/DDC and WIDAR,
 C                but might need something else for other 
 C                systems.
 C
-                 WRITE( IVEX, '( 5X, A, A, A1 )' )
+C                VDIF8032 is appropriate for VNDA,
+C                but might need something else for other 
+C                systems. (AED 07/18/2024).
+C
+C                VDIF Format for DBBCs with Mark6  (Flexbuff 08/16/2024).
+C
+                 IF ( DBE(KS) .EQ. 'VNDA' .OR.
+     1               DBE(KS)(1:4) .EQ. 'DBBC' ) THEN
+                     WRITE( IVEX, '( 5X, A, A, A1 )' )
+     1               'track_frame_format = ','VDIF8032', SEP
+                 ELSE
+                     WRITE( IVEX, '( 5X, A, A, A1 )' )
      1               'track_frame_format = ','VDIF5032', SEP
+                 END IF
            
               ELSE IF( FORMAT(KS)(1:3) .EQ. 'LBA' ) THEN
 C                       WRITE( IVEX, '( 5X, A, A, A1 )' )

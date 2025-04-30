@@ -44,6 +44,10 @@ C
             IF( DBE(KS) .NE. 'WIDAR' ) THEN
                GOTERR = .TRUE.
             END IF
+         ELSE IF( DAR(KSTA) .EQ. 'VNDA' ) THEN
+            IF( DBE(KS) .NE. 'VNDA' ) THEN
+               GOTERR = .TRUE.
+            END IF
          ELSE
             IF( DBE(KS) .NE. ' ' ) THEN
                GOTERR = .TRUE.

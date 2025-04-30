@@ -359,9 +359,28 @@ C
             POINT(ISCN) = KD( KEYPTR( 'POINT', KC, KI ) )
          END IF
          AUTOPEAK = KD( KEYPTR( 'AUTOPEAK', KC, KI ) ) .EQ. 0.D0
+         SYNL404 = KD( KEYPTR( 'SYNL404', KC, KI ) ) .EQ. 0.D0
          PKWATCH = KD( KEYPTR( 'PKWATCH', KC, KI ) ) .EQ. 0.D0
          PEAKFILE = KCHAR( 'PEAKFILE', 80, .FALSE., KD, KC, KI ) 
          CALL ENVIR( PEAKFILE )
+C
+C        Get explicit indication to create CRD files. (AED 7/23/2024)
+C
+         I1 = KEYPTR( 'MAKECRD', KC, KI )
+         MAKECRD = KD(I1) .EQ. 0.D0 
+
+C
+C        Get type of vex file to generate (1.5 or 2). (AED 3/31/2025)
+C
+         I1 = KEYPTR( 'VEXVRSN', KC, KI )
+         IF (KD(I1) .EQ. 1.5 ) THEN
+            VEXVRSN = '1.5'
+         ELSE IF (KD(I1) .EQ. 2 ) THEN
+            VEXVRSN = '2.0'
+         ELSE
+            VEXVRSN = KCHAR( 'VEXVRSN', 4, .FALSE., KD, KC, KI )
+            CALL UPCASE ( VEXVRSN )
+         END IF
 C
 C        Get any specification of a group of scans from which to
 C        select the highest elevation one.
@@ -506,7 +525,7 @@ C     Get items for which only the last input given is used.
 C
       EXPT = KCHAR( 'EXPT', 72, .FALSE., KD, KC, KI ) 
       IF( LEN1(EXPT) .EQ. 0 ) EXPT = 'No description given.'
-      EXPCODE = KCHAR( 'EXPCODE', 8, .FALSE., KD, KC, KI )
+      EXPCODE = KCHAR( 'EXPCODE', 16, .FALSE., KD, KC, KI )
       LINEPG = KD( KEYPTR( 'LINEPG', KC, KI ) )
       TPREF = KD( KEYPTR( 'TPREF', KC, KI ) )
       PTDUR = KD( KEYPTR( 'PTDUR', KC, KI ) )

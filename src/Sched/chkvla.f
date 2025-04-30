@@ -29,7 +29,7 @@ C
       CHARACTER   VIFNAME(VMIF)*1, VIFPOL(VMIF)*3
       CHARACTER   VBANDS(MVFE)*2, VBANDSL(MVFE)*2, VLBBANDS(MVFE)*4
       INTEGER     KS, ICH, JCH, NCIF(VMIF), IIF, NAC, NBD, ISCN
-      INTEGER     ISETF, IB, LEN1
+      INTEGER     ISETF, IB, LEN1, KAMAJORITY, QMAJORITY
       LOGICAL     ERRS, GOTPAIR, IFOK
       DOUBLE PRECISION  VIFFLO(VMIF), VIFFHI(VMIF), FRMAX, FRMIN
       DOUBLE PRECISION  ACAVG, BDAVG
@@ -169,6 +169,22 @@ C
       IF( NAC .GT. 0 ) ACAVG = ACAVG / NAC
       IF( NBD .GT. 0 ) BDAVG = BDAVG / NBD
 C
+C     Counters for Ka and Q band overlap
+C     Majority will decide correct band name
+C
+      KAMAJORITY = 0
+      QMAJORITY = 0
+      DO IIF = 1, VMIF
+         IF( FREQREF(IIF*2,KS) .GE. 26.5D3 .AND.
+     1       FREQREF(IIF*2,KS).LT. 40.D3 ) THEN
+                 KAMAJORITY = KAMAJORITY + 1
+         END IF
+         IF( FREQREF(IIF*2,KS) .GE. 38.D3 .AND.
+     1       FREQREF(IIF*2,KS).LT. 50.D3 ) THEN
+                 QMAJORITY = QMAJORITY + 1
+         END IF
+      END DO
+C
 C     Now complain if any IF has too many channels and do other 
 C     checks of the IFs.
 C
@@ -215,14 +231,34 @@ C
      3                FE(IIF,KS) .EQ. VLBBANDS(IB) ) THEN
                      FE(IIF,KS) = VBANDS(IB)
                   ELSE IF( FE(IIF,KS) .NE. VBANDS(IB) ) THEN
-                     MSGTXT = ' '
-                     WRITE( MSGTXT, '( A, I5, 4A )' )
+C
+C     Check for Ka and Q naming overlap that may cause an error when 
+C     band names are checked.
+C     It has been decided that using other subbands to check if 
+C     they are in Q or Ka and pick the one based off that. 
+C     Sky frequency is freqref+freqoff (FREQREF) and that is used 
+C     to compare to the 40GHz cutoff and will decide the band name.
+C                  
+                     IF( FREQREF(IIF*2,KS) .GE. 26.5D3 .AND.
+     1                     FREQREF(IIF*2,KS).LT. 40.D3 .AND. 
+     2                     KAMAJORITY .GT. 2 .AND. 
+     3                     VBANDS(IB) .NE. 'Ka' ) THEN
+                         FE(IIF,KS) = 'Ka'
+                     ELSE IF( FREQREF(IIF*2,KS) .GE. 38.D3 .AND.
+     1                     FREQREF(IIF*2,KS).LT. 50.D3 .AND. 
+     2                     QMAJORITY .GT. 2 .AND. 
+     3                     VBANDS(IB) .NE. 'Q' ) THEN
+                         FE(IIF,KS) = 'Q'
+                     ELSE
+                         MSGTXT = ' '
+                         WRITE( MSGTXT, '( A, A, I5, 4A )' )
      1                  'CHKVLA: Apparently incorrect VLA FE name ',
      2                  'for setup:', KS, '.  Is: ', FE(IIF,KS),
      3                  '  Should be: ', VBANDS(IB)
-                     CALL WLOG( 1, MSGTXT )
-                     CALL ERRLOG( 'Fix VLA BAND name in setup'//
-     1                   SETFILE(ISETF)(1:LEN1(SETFILE(ISETF))) )
+                         CALL WLOG( 1, MSGTXT )
+                         CALL ERRLOG( 'Fix VLA BAND name in setup'//
+     1                     SETFILE(ISETF)(1:LEN1(SETFILE(ISETF))) )
+                     END IF
                   END IF
                END IF
             END DO
