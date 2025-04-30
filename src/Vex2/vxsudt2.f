@@ -106,11 +106,12 @@ C
          STRRA = TFORM( RA2000(ISRC), 'T', 0, 2, 10, 'hms' ) 
          STRDEC = TFORM( D2000(ISRC),  ' ', 1, 2, 9,  'd''"' )
          CH1 = '*'
-         WRITE( IVEX, '( A1, 4X, A, A, A1, 1X, A, A, A1, 1X, 
-     1       A, A, A1 )' )
-     2       CH1, 'ra = ', STRRA(1:LEN1(STRRA)), 
-     3       SEP, 'dec = ', STRDEC(1:LEN1(STRDEC)),
-     4      SEP, 'ref_coord_frame = ', 'J2000', SEP 
+         WRITE( IVEX, '( A1, 4X, A, A, A1, 1X, A, A, A1 )' )
+     1       CH1, 'ra = ', STRRA(1:LEN1(STRRA)), 
+     2       SEP, 'dec = ', STRDEC(1:LEN1(STRDEC)), SEP
+         CH1 = ' '
+         WRITE( IVEX, '( A1, 4X, A, A, A1 )' )
+     1      CH1, 'ref_coord_frame = ', 'J2000', SEP 
       ELSE
          STRRA = TFORM( RA2000(ISRC), 'T', 0, 2, 10, 'hms' ) 
          STRDEC = TFORM( D2000(ISRC),  ' ', 1, 2, 9,  'd''"' )
