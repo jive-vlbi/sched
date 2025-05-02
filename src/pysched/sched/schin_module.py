@@ -108,6 +108,7 @@ state_defaults = {
     "preempt":   ["--",                    util.upper],
     "peak":      [parameter.unset,         util.noop],
     "autopeak":  [1.,                      util.to_bool],
+    "synl404":   [1.,                      util.to_bool],
     "pkwatch":   [1.,                      util.to_bool],
     "higroup":   [1.,                      util.noop],
     "setup":     ["DUMMY",                 util.noop],
@@ -535,6 +536,7 @@ def schin(stdin):
                                get_default(attribute)))
             
             s.schcon.autopeak = values["autopeak"]
+            s.schcon.synl404 = values["synl404"]
             s.schcon.pkwatch = values["pkwatch"]
             s.schsco.peakfile = util.resize_string(util.expand_file_name(
                 values["peakfile"]), s.schsco.peakfile.itemsize, "peakfile")

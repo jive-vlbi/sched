@@ -8,6 +8,9 @@ def getfreq():
     freqfile = bytes(s.schsco.freqfile).decode().strip()
     
     s.wlog(0, "GETFREQ: Reading frequency file:  {}".format(freqfile))
+    if (s.schcon.synl404):
+        s.schsco.freqfile = util.expand_file_name(
+            '$SCHED/catalogs/short_VNDA_freq_RDBE.dat')
     
     try:
         f = open(freqfile, "r")
@@ -90,5 +93,8 @@ def getfreq():
     s.frqn.nfreq = len(keyin_data)
     s.schsco.freqver =  util.resize_string(state_defaults["version"][0], 
                                            s.schsco.freqver.itemsize, "version")
+
+    if s.schcon.synl404:
+        s.makefreq(s.frqn.nfreq)
 
     s.listfreq()

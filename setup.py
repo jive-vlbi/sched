@@ -294,6 +294,17 @@ Sched/wrapzone2.f
 Sched/wrtcov.f
 Sched/wrtfreq.f
 Sched/wrtmsg.f
+Sched/Freq/VLBA/cbandfreq.f
+Sched/Freq/VLBA/get_rfx.f
+Sched/Freq/VLBA/kbandfreq.f
+Sched/Freq/VLBA/kubandfreq.f
+Sched/Freq/VLBA/lbandfreq.f
+Sched/Freq/VLBA/makefreq.f
+Sched/Freq/VLBA/qbandfreq.f
+Sched/Freq/VLBA/sbandfreq.f
+Sched/Freq/VLBA/sortrfx.f
+Sched/Freq/VLBA/wbandfreq.f
+Sched/Freq/VLBA/xbandfreq.f
 Sla/amp.f
 Sla/ampqk.f
 Sla/calyd.f
@@ -526,7 +537,8 @@ haavai
 halim 
 jplver 
 listfreq 
-lst2ut 
+lst2ut
+makefreq 
 makeptg 
 omsout 
 openwrap 
