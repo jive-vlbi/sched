@@ -35,6 +35,7 @@ def setbbc(ks, setup_catalog, frequency_entries, station_entries):
         bbc_func = {"VLBA": s.bbcvlba,
                     "RDBE": s.bbcrdbe,
                     "RDBE2": s.bbcrdbe,
+                    "VNDA": s.bbcvnda,
                     "WIDAR": s.bbcwidar,
                     "VLBAG": s.bbcgeo,
                     "VLBA4": s.bbcgeo,

@@ -1005,7 +1005,8 @@ def stations_block(vex_version, print_warnings):
                    "NONE": "none",
                    "R1002": "Mark4",
                    "eMERL": "WIDAR"}
-        dar_map.update({k: k for k in ("VLBA", "VLBA4", "K4", "WIDAR", "LBA")})
+        dar_map.update({k: k for k in ("VLBA", "VLBA4", "K4", "WIDAR", "LBA",
+                                       "VNDA")})
         if vex_version < "2":
             dar_map.update({"MKIII": "Mark3A",
                             "VLBAG": "VLBAG",

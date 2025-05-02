@@ -79,6 +79,7 @@ Sched/bbckvsr.f
 Sched/bbclba.f
 Sched/bbcm4.f
 Sched/bbcrdbe.f
+Sched/bbcvnda.f
 Sched/bbcvlba.f
 Sched/bbcvs2.f
 Sched/bbcwidar.f
@@ -492,7 +493,8 @@ bbckvsr
 bbclba 
 bbcm4 
 bbcrdbe 
-bbcvlba 
+bbcvlba
+bbcvnda 
 bbcwidar 
 chk4dar 
 chkcdas 
