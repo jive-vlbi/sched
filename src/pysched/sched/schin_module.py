@@ -150,6 +150,7 @@ state_defaults = {
     "ophmaxdt":  [7200.,                   util.noop],
     "wrap24":    [1.,                      util.to_bool],
     "makecrd":   [1.,                      util.to_bool],
+    "vexvrsn":   ["NONE",                  util.upper],
     "expt":      ["No description given.", util.noop],
     "expcode":   ["NUG",                   util.noop],
     "linepg":    [55.,                     util.noop],
@@ -540,6 +541,17 @@ def schin(stdin):
 
             s.schcon.makecrd = values["makecrd"]
             
+            for num, text in ((1.5, "1.5"), (2, "2.0")):
+                try:
+                    if float(values["vexvrsn"]) == num:
+                        s.schcon.vexvrsn = text
+                        break
+                except ValueError:
+                    pass
+            else:
+                s.schcon.vexvrsn = util.resize_string(
+                    values["vexvrsn"], s.schcon.vexvrsn.itemsize, "vexvrsn")
+
             entry.setnum = SetupFileCatalog.extend_with(
                 util.expand_file_name(values["setup"]), 
                 " SCHIN: Too many setup files. ")

@@ -39,18 +39,22 @@ def vexout():
             (observation_type != "CONFIG"):
             # write two VEX (version) files, 
             # only print warnings while making the first one
-            with open("{}.vex".format(f2str(s.schc1.expcode).lower()), "w") \
-                 as vex_file:
-                s.wlog(0, "Writing V E X file {}".format(vex_file.name))
-                vex.write(vex_file, vex_version="1.5", print_warnings=True)
-                # write VEX file name to common block for v2dout
-                s.vex1.vexfile = resize_string(vex_file.name, 
-                                               s.vex1.vexfile.itemsize,
-                                               "vexfile")
-            with open("{}.vex2".format(f2str(s.schc1.expcode).lower()), "w") \
-                 as vex_file:
-                s.wlog(0, "Writing V E X 2 file {}".format(vex_file.name))
-                vex.write(vex_file, vex_version="2.0", print_warnings=False)
+            requested_version = f2str(s.schcon.vexvrsn)
+            if requested_version == "NONE":
+                requested_version = "BOTH"
+            lower_exp = f2str(s.schc1.expcode).lower()
+            if requested_version in {"1.5", "BOTH"}:
+                with open(f"{lower_exp}.vex".format(), "w") as vex_file:
+                    s.wlog(0, "Writing V E X file {}".format(vex_file.name))
+                    vex.write(vex_file, vex_version="1.5", print_warnings=True)
+                    # write VEX file name to common block for v2dout
+                    s.vex1.vexfile = resize_string(vex_file.name, 
+                                                   s.vex1.vexfile.itemsize,
+                                                   "vexfile")
+            if requested_version in {"2.0", "BOTH"}:
+                with open(f"{lower_exp}.vex2", "w") as vex_file:
+                    s.wlog(0, "Writing V E X 2 file {}".format(vex_file.name))
+                    vex.write(vex_file, vex_version="2.0", print_warnings=False)
 
             if observation_type != "PTVLBA":
                 s.v2dout()
