@@ -287,11 +287,12 @@ def stafiles():
                     write_schedule(sch_file, state, station, scan, scan_index,
                                    frequency_sets, setups, used_setups, sources)
                         
-
-                    s.crdwrt(scan_index + 1, station_index + 1, state.first)
+                    if s.schcon.makecrd:
+                        s.crdwrt(scan_index + 1, station_index + 1, state.first)
                     state.first = False
 
-            s.crdwrt(-999, station_index + 1, False)
+            if s.schcon.makecrd:
+                s.crdwrt(-999, station_index + 1, False)
         
             if opened_crd_file:
                 s.closewrp(parameter.iuvba)

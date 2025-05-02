@@ -46,6 +46,7 @@ def stmsg():
            "plotting.")
     s.wlog(1, "   FREQLIST=lowF,highF    :  Make frequency list (MHz).  "
            "Then exit.")
+    s.wlog(1, "   MAKECRD                :  Make crd file.")
     s.wlog(1, "   EXIT                   :  Leave program.")
     s.wlog(1, "   /                      :  End of inputs - run program "
            "(or EXIT).")

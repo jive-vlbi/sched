@@ -149,6 +149,7 @@ state_defaults = {
     "ophawt":    [1.,                      util.noop],
     "ophmaxdt":  [7200.,                   util.noop],
     "wrap24":    [1.,                      util.to_bool],
+    "makecrd":   [1.,                      util.to_bool],
     "expt":      ["No description given.", util.noop],
     "expcode":   ["NUG",                   util.noop],
     "linepg":    [55.,                     util.noop],
@@ -537,6 +538,8 @@ def schin(stdin):
             s.schsco.peakfile = util.resize_string(util.expand_file_name(
                 values["peakfile"]), s.schsco.peakfile.itemsize, "peakfile")
 
+            s.schcon.makecrd = values["makecrd"]
+            
             entry.setnum = SetupFileCatalog.extend_with(
                 util.expand_file_name(values["setup"]), 
                 " SCHIN: Too many setup files. ")
