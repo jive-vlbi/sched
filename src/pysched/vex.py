@@ -354,9 +354,12 @@ def modes_block(vex_version, print_warnings):
                 track = (("S2_data_source", "VLBA"),
                          ("S2_recording_mode", "none"))
             elif track_format.startswith("VDIF"):
-                # 5032 functionality copied from SCHED, undocumented VEX,
+                # 5032/8032 functionality copied from SCHED, undocumented VEX,
                 # not used by JIVE
-                track = (("track_frame_format", "VDIF5032"),)                
+                if setup.dbe[:4] in {"VNDA", "DBBC"}:
+                    track = (("track_frame_format", "VDIF8032"),)
+                else:
+                    track = (("track_frame_format", "VDIF5032"),)
             else:
                 track = (("track_frame_format", track_format),)
                 if track_format == "Mark3A":
