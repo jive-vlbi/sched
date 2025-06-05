@@ -83,7 +83,8 @@ def schsum(restart):
 
         write_correlator(sum_file, scans, scan_catalog.scan_offset, setup_files)
 
-        write_stations(sum_file, stations, scans)
+        write_stations(sum_file, stations, scans, scan_catalog.scan_offset,
+                       setups, frequencies)
 
         write_summary(sum_file, scans, scan_catalog.scan_offset, stations,
                       setup_files)
@@ -606,7 +607,7 @@ def write_correlator(sum_file, scans, scan_offset, setup_files):
 """)
 
 
-def write_stations(sum_file, stations, scans):
+def write_stations(sum_file, stations, scans, scan_offset, setups, frequencies):
     sum_file.write("""
 
 
@@ -706,10 +707,26 @@ RECORDING SYSTEM AND CALIBRATION INFORMATION:
    Station    Drive type   DAR     NBBC    Tsys
 """)
             for station in disk_stations:
+                # check which TSCAL setting are in effect, could be globally
+                # through station.tscal or overwritten in a freq entry
+                tscals = set()
+                for scan_index, scan in enumerate(scans, scan_offset + 1):
+                    if not station.stascn[scan_index]:
+                        continue
+                    # -1: FORTRAN -> python indexing
+                    setup = setups[station.nsetup[scan_index] - 1]
+                    if (setup.ifreqnum[0] >= 1):
+                        freq_tscal = frequencies[setup.ifreqnum[0] -1].tscal
+                        if freq_tscal is not None:
+                            tscals.add(freq_tscal)
+                if len(tscals) == 0:
+                    tscals.add(station.tscal)
+                tscal = ", ".join(sorted(tscals))
+                
                 sum_file.write(f"   {station.station: <8}     "
                                f"{station.disk: <6}     "
                                f"{station.dar: <5}{station.nbbc:6d}     "
-                               f"{station.tscal: <4}\n")
+                               f"{tscal}\n")
                 
         other_stations = [station for station in stations
                           if not station.usedisk]
