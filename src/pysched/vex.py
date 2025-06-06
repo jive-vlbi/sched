@@ -1213,9 +1213,23 @@ def sched_block(scan_mode, vex_version, print_warnings):
         scan_def = (("start", time2str(scan.startj)),
                     ("mode", scan_mode[scan_index]),
                     ("source", scan.scnsrc))
-        if (vex_version >= "2") and (len(scan.scanexps) > 0):
-            scan_def += (
-                ("intent", "", "EXPERIMENTS", ",".join(scan.scanexps)),)
+        if (vex_version >= "2"):
+            def make_intent(intent_str):
+                s = intent_str.split(":")
+                if len(s) == 1:
+                    return ("intent", "", intent_str, "True")
+                elif len(s) == 2:
+                    return ("intent", "", *s)
+                else:
+                    raise RuntimeError(
+                        "Only supporting single value intent, or key/value "
+                        f"pair separated by ':', not {intent_str}")
+            scan_def += tuple(
+                make_intent(f2str(s.schc2c.intent[intent_index - 1]))
+                for intent_index in scan.iscint[:scan.nscint])
+            if (len(scan.scanexps) > 0):
+                scan_def += (
+                    ("intent", "", "EXPERIMENTS", ",".join(scan.scanexps)),)
         scan_name = "No{:04d}".format(scan_index+scan_offset+1)
         for station in stations:
             if station.stascn[scan_index+scan_offset]:
