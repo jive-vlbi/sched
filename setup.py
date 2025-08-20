@@ -625,9 +625,14 @@ Sched/schpeak.inc
 Sched/schset.inc
 Sched/srlist.inc
 Sched/vxlink.inc
+Sched/Freq/VLBA/sched.inc
+Sched/Freq/VLBA/schfreq.inc
 Vex/sched.inc
 Vex/schset.inc
 Vex/vxlink.inc
+Vex2/sched.inc
+Vex2/schset.inc
+Vex2/vxlink2.inc
 """.split()
 
 # include catalogs and setups directory contents
