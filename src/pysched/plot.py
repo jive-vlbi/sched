@@ -1350,7 +1350,7 @@ class MainWidget(QWidget):
                     (station.up2[scan_index] == "")
 
             # schedlib.plbeam expects 2 arrays for u and corresponding v points
-            sched_uv_size = 600000 # defined in src/Plot/beam.inc
+            sched_uv_size = 4000000 # defined in src/Plot/beam.inc
             u = np.zeros((sched_uv_size, 1))
             v = np.zeros((sched_uv_size, 1))
             uv_index = 0
