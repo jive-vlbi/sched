@@ -169,6 +169,9 @@ We therefore recommend to unset this variable before running pySCHED (which woul
 * __v1.26.3 (2024-05-16)__: Fixed typos in the sum file writing module.
 * __v1.26.4 (2024-06-03)__: Fixed bug triggered by using GRABTO with NOSETUP.
 * __v1.27.0 (2025-02-25)__: Merge with SCHED 11.8.
+* __v1.28.0 (2025-08-20)__: Merge with SCHED 12.0.
+* __v1.28.1 (2025-08-20)__: Fixed packaging bug: missing Vex2 Fortran include files.
+* __v1.28.2 (2025-08-21)__: Fixed bug: a parameter to the Fortran function plbeam changed in size, but the call wasn't updated alongside.
 
 
 # Contact
