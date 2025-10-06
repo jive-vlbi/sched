@@ -38,6 +38,7 @@ where the optional parameter `-p`  retrieves the graphical mode in order to be a
 - Python (>= 3.6).
 - A Fortran compiler.
 - NumPy (>= 1.16, < 1.24).
+- Setuptools (<60)
 - Git.
 
 #### PyQt5 dependencies
@@ -62,6 +63,7 @@ If you want to install **pySCHED** using `pip`, it can be used directly:
 
 ```bash
 sudo pip3 install 'numpy<1.24'
+sudo pip3 install 'setuptools<60'
 sudo pip3 install pythonSCHED
 ```
 
