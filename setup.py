@@ -677,7 +677,7 @@ setup(
         "Topic :: Scientific/Engineering :: Astronomy"],
     scripts=["src/sched.py"],
     ext_modules=[extension],
-    python_requires=">=3.6",
+    python_requires=">=3.6, <3.12",
     setup_requires=["numpy>=1.19, <1.24",
                     "setuptools>=24.3, <60"],
     install_requires=["numpy>=1.19, <1.24",
