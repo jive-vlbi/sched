@@ -151,7 +151,7 @@ state_defaults = {
     "ophmaxdt":  [7200.,                   util.noop],
     "wrap24":    [1.,                      util.to_bool],
     "makecrd":   [1.,                      util.to_bool],
-    "vexvrsn":   ["NONE",                  util.upper],
+    "vexvrsn":   ["NONE",                  util.noop],
     "expt":      ["No description given.", util.noop],
     "expcode":   ["NUG",                   util.noop],
     "linepg":    [55.,                     util.noop],
@@ -542,17 +542,27 @@ def schin(stdin):
                 values["peakfile"]), s.schsco.peakfile.itemsize, "peakfile")
 
             s.schcon.makecrd = values["makecrd"]
-            
-            for num, text in ((1.5, "1.5"), (2, "2.0")):
-                try:
-                    if float(values["vexvrsn"]) == num:
-                        s.schcon.vexvrsn = text
+            # VEXVRSN is a string, but can have a number as input,
+            # the KEYIN parser makes that a float/int, reverse this
+            vexvrsn_fixed = False
+            try:
+                vex_version_float = float(values["vexvrsn"])
+                for num, text in ((1.5, "1.5"), (2, "2.0")):
+                    if num == vex_version_float:
+                        s.schcon.vexvrsn = util.resize_string(
+                            text, s.schcon.vexvrsn.itemsize, "vexvrsn")
+                        vexvrsn_fixed = True
                         break
-                except ValueError:
-                    pass
-            else:
+            except ValueError as e:
+                pass
+            if not vexvrsn_fixed:
+                if not (isinstance(values["vexvrsn"], str) and
+                        values["vexvrsn"].upper() in ("NONE", "BOTH")):
+                    raise RuntimeError(
+                        f"{values['vexvrsn']} is not a valid VEXVRSN option, "
+                        "allowed values: 1.5, 2.0, BOTH and NONE.")
                 s.schcon.vexvrsn = util.resize_string(
-                    values["vexvrsn"], s.schcon.vexvrsn.itemsize, "vexvrsn")
+                    values["vexvrsn"].upper(), s.schcon.vexvrsn.itemsize, "vexvrsn")
 
             entry.setnum = SetupFileCatalog.extend_with(
                 util.expand_file_name(values["setup"]), 
