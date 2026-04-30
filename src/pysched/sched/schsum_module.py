@@ -711,7 +711,10 @@ RECORDING SYSTEM AND CALIBRATION INFORMATION:
                 # through station.tscal or overwritten in a freq entry
                 tscals = set()
                 for scan_index, scan in enumerate(scans, scan_offset + 1):
-                    if not station.stascn[scan_index]:
+                    if ((not station.stascn[scan_index]) or
+                        (station.nsetup[scan_index] == 0)):
+                        # ignore scans in which the station doesn't participate
+                        # or doesn't have a setup
                         continue
                     # -1: FORTRAN -> python indexing
                     setup = setups[station.nsetup[scan_index] - 1]
