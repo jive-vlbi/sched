@@ -78,20 +78,19 @@ sudo apt-get install python3-pip
 If you are encountering issues (both during installation or while running) with pySCHED, please check the [Discussions page](https://github.com/jive-vlbi/sched/discussions). We are summarizing here the most-common problems and how to solve them.
 
 ## Update
-
-The command to update pySCHED is:
-
-```bash
-sudo pip3 install --upgrade pythonSCHED
-```
-
-Or when using a conda installation:
+    
+The command to update pySCHED is, when using a conda installation:
 
 ```bash
 conda activate pySCHED
 pip install --upgrade pythonSCHED
 ```
 
+Or when pySCHED is installed outside of a virtual environment:
+
+```bash
+sudo pip3 install --upgrade pythonSCHED
+```
 
 
 ## Usage
