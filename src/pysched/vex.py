@@ -31,6 +31,16 @@ def write(output, vex_version="2.0", print_warnings=False):
         Catalog().read()
     station_catalog = StationCatalog()
     station_catalog.read_scheduled_attributes()
+
+    # check we have no duplicate station codes
+    stations = station_catalog.used()
+    codes_used = {}
+    for station in stations:
+        if station.stcode in codes_used:
+            s.errlog(f"The station code '{station.stcode}' is used for both '{codes_used[station.stcode]}' and '{station.station}'.\n"
+                     "Cannot generate a VEX file, make sure that each scheduled station has a unique STCODE.")
+        codes_used[station.stcode] = station.station
+    
     SourceCatalog().set_aliases()
     scan_catalog = ScanCatalog()
     vex_scans.apply_tape_offset(
