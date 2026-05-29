@@ -42,7 +42,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell   GBytes    SY
  --- Wed  25 Dec 2002   Day 359 ---
 
  Next scan frequencies:  1411.56  1411.56  1411.56  1411.56
- Next BBC frequencies:    111.56   111.56   111.56   111.56
+ Next BBC frequencies:   1225.56  1225.56  1225.56  1225.56
  Next scan bandwidths:      8.00     8.00     8.00     8.00
 
 00 15 00  J1215+1654   12 17 06  63.4 181.0  0.0       0.8     0        0   00 15 00
@@ -305,7 +305,7 @@ SETUP FILE INFORMATION:
 
  ======== Setup file: eo999.21cm
    Matching groups in /home/eldering/sched/catalogs/freq.dat:
-     ur18cm_g        Generated from sess119L5nme.setini, sess119LG.setini, sess219L5nme.setini, sess*
+     ur18cm_g        Generated from evn18cm-1Gbps-32MHz.set, evn18cm-1Gbps-32MHz-USB.set
 
    Setup group:    7         Station: URUMQI            Total bit rate:   128
    Format: MARK5B            Bits per sample: 2         Sample rate: 16.000
@@ -313,7 +313,7 @@ SETUP FILE INFORMATION:
 
    Disk used to record data.
 
-   1st LO=   1300.00   1300.00   1300.00   1300.00
+   1st LO=    186.00    186.00    186.00    186.00
    Net SB=         U         U         U         U
    IF SB =         U         U         U         U
    Pol.  =      RCP       LCP       RCP       LCP 
@@ -325,7 +325,7 @@ SETUP FILE INFORMATION:
 
   Frequency Set:   7  Based on FREQ, BW, and/or DOPPLER in schedule.  Used with PCAL = off
    LO sum=   1411.56  1411.56  1411.56  1411.56
-   BBC fr=    111.56   111.56   111.56   111.56
+   BBC fr=   1225.56  1225.56  1225.56  1225.56
    Bandwd=      8.00     8.00     8.00     8.00
     Matching frequency sets:   7
 
@@ -376,8 +376,8 @@ SOURCE SCAN SUMMARY FOR SOURCES LISTED ABOVE
      Baseline hours are only counted for scans above horizon at both ends.
   Source       Setup file             Frequency sets                  Observing hours
                                    (duplicates not shown)              Scan  Baseline
-  M84        eo999.21cm            1 2 3 4 5 6 7                     8.100   137.485
-  J1215+1654 eo999.21cm            1 2 3 4 5 6 7                     1.800    25.706
+  M84        eo999.21cm            1 2 3 4 5 6 7                     8.100   136.885
+  J1215+1654 eo999.21cm            1 2 3 4 5 6 7                     1.800    25.260
   J1224+2122 eo999.21cm            1 2 3 4 5 6 7                     0.100     2.030
   3C273      eo999.21cm            1 2 3 4 5 6 7                     0.133     2.800
   3C279      eo999.21cm            1 2 3 4 5 6 7                     0.133     2.732

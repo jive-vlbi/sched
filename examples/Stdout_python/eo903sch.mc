@@ -42,7 +42,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell   GBytes    SY
  --- Wed  25 Dec 2002   Day 359 ---
 
  Next scan frequencies:  4974.49  4974.49  4982.49  4982.49  4990.49  4990.49  4998.49  4998.49
- Next BBC frequencies:    630.49   630.49   638.49   638.49   646.49   646.49   654.49   654.49
+ Next BBC frequencies:    618.49   618.49   626.49   626.49   634.49   634.49   642.49   642.49
  Next scan bandwidths:      8.00     8.00     8.00     8.00     8.00     8.00     8.00     8.00
 
 11 00 00  J0132+4325   18 01 45  16.4 404.2 -7.5     -43.2     0        0   11 00 00
@@ -955,7 +955,7 @@ SETUP FILE INFORMATION:
 
  ======== Setup file: eo999.6cm
    Matching groups in /home/eldering/sched/catalogs/freq.dat:
-     mc6cm_g         Generated from sess321C4G.setini
+     mc6cm_g         Generated from evn+global6cm-4Gbps-32MHz.set
 
    Setup group:    5         Station: MEDICINA          Total bit rate:   256
    Format: MARK5B            Bits per sample: 2         Sample rate: 16.000
@@ -963,7 +963,7 @@ SETUP FILE INFORMATION:
 
    Disk used to record data.
 
-   1st LO=   4344.00   4344.00   4344.00   4344.00   4344.00   4344.00   4344.00   4344.00
+   1st LO=   4356.00   4356.00   4356.00   4356.00   4356.00   4356.00   4356.00   4356.00
    Net SB=         U         U         U         U         U         U         U         U
    IF SB =         U         U         U         U         U         U         U         U
    Pol.  =      RCP       LCP       RCP       LCP       RCP       LCP       RCP       LCP 
@@ -975,7 +975,7 @@ SETUP FILE INFORMATION:
 
    Frequency Set:   4  Setup file default.  Used with PCAL = 1MHz
    LO sum=   4974.49  4974.49  4982.49  4982.49  4990.49  4990.49  4998.49  4998.49
-   BBC fr=    630.49   630.49   638.49   638.49   646.49   646.49   654.49   654.49
+   BBC fr=    618.49   618.49   626.49   626.49   634.49   634.49   642.49   642.49
    Bandwd=      8.00     8.00     8.00     8.00     8.00     8.00     8.00     8.00
     Matching frequency sets:   4
 
@@ -1020,9 +1020,9 @@ SOURCE SCAN SUMMARY FOR SOURCES LISTED ABOVE
      Baseline hours are only counted for scans above horizon at both ends.
   Source       Setup file             Frequency sets                  Observing hours
                                    (duplicates not shown)              Scan  Baseline
-  B0128+437  eo999.6cm             1 2 3 4 5 6 7 8                   5.200   111.314
-  J0132+4325 eo999.6cm             1 2 3 4 5 6 7 8                   4.333    90.084
-  J0154+4743 eo999.6cm             1 2 3 4 5 6 7 8                   0.367    10.022
+  B0128+437  eo999.6cm             1 2 3 4 5 6 7 8                   5.200   108.699
+  J0132+4325 eo999.6cm             1 2 3 4 5 6 7 8                   4.333    87.683
+  J0154+4743 eo999.6cm             1 2 3 4 5 6 7 8                   0.367    10.009
   DA193      eo999.6cm             1 2 3 4 5 6 7 8                   0.183     5.133
   3C454.3    eo999.6cm             1 2 3 4 5 6 7 8                   0.183     4.777
 

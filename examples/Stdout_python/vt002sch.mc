@@ -42,7 +42,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell   GBytes    SY
  --- Sun  16 Jun 1996   Day 168 ---
 
  Next scan frequencies:  4962.00  4978.00
- Next BBC frequencies:    618.00   634.00
+ Next BBC frequencies:    606.00   622.00
  Next scan bandwidths:     16.00    16.00
 
 06 00 00  1928+738     00 25 44  46.6 337.2  5.0      89.2     0        0   05 59 55
@@ -247,7 +247,7 @@ SETUP FILE INFORMATION:
 
  ======== Setup file: vsop6cm.set
    Matching groups in /home/eldering/sched/catalogs/freq.dat:
-     mc6cm_g         Generated from sess321C4G.setini
+     mc6cm_g         Generated from evn+global6cm-4Gbps-32MHz.set
 
    Setup group:    7         Station: MEDICINA          Total bit rate:   128
    Format: MARK5B            Bits per sample: 2         Sample rate: 32.000
@@ -255,7 +255,7 @@ SETUP FILE INFORMATION:
 
    Disk used to record data.
 
-   1st LO=   4344.00   4344.00
+   1st LO=   4356.00   4356.00
    Net SB=         U         U
    IF SB =         U         U
    Pol.  =      LCP       LCP 
@@ -267,7 +267,7 @@ SETUP FILE INFORMATION:
 
    Frequency Set:   7  Setup file default.  Used with PCAL = 1MHz
    LO sum=   4962.00  4978.00
-   BBC fr=    618.00   634.00
+   BBC fr=    606.00   622.00
    Bandwd=     16.00    16.00
     Matching frequency sets:   7
 

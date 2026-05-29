@@ -485,9 +485,9 @@ SOURCE SCAN SUMMARY FOR SOURCES LISTED ABOVE
      Baseline hours are only counted for scans above horizon at both ends.
   Source       Setup file             Frequency sets                  Observing hours
                                    (duplicates not shown)              Scan  Baseline
-  B0128+437  eo999.6cm             1 2 3 4 5 6 7 8                   2.200    54.621
-  J0132+4325 eo999.6cm             1 2 3 4 5 6 7 8                   1.833    44.531
-  J0154+4743 eo999.6cm             1 2 3 4 5 6 7 8                   0.183     4.943
+  B0128+437  eo999.6cm             1 2 3 4 5 6 7 8                   2.200    53.633
+  J0132+4325 eo999.6cm             1 2 3 4 5 6 7 8                   1.833    43.543
+  J0154+4743 eo999.6cm             1 2 3 4 5 6 7 8                   0.183     4.930
   0234+285   eo999.6cm             1 2 3 4 5 6 7 8                   0.183     5.133
 
 

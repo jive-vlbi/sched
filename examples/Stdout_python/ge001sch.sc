@@ -232,7 +232,7 @@ SOURCE SCAN SUMMARY FOR SOURCES LISTED ABOVE
   Source       Setup file             Frequency sets                  Observing hours
                                    (duplicates not shown)              Scan  Baseline
   3C84       s/v6cm-256-8-2-UL.set 1 5 6 7 9 11                      0.367    38.500
-  DA193      s/v6cm-256-8-2-UL.set 1 5 6 7 8 9 10 11 12             13.567  1187.677
+  DA193      s/v6cm-256-8-2-UL.set 1 5 6 7 8 9 10 11 12             13.567  1187.652
   3C273      s/v6cm-256-8-2-UL.set 1                                 0.733    17.967
   NRAO512    s/v6cm-256-8-2-UL.set 1 5 6 7 8 9 10 11 12              0.367    49.867
   3C345      s/v6cm-256-8-2-UL.set 1 5 6 7 8 9 10 11 12              0.367    49.867

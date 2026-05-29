@@ -167,9 +167,9 @@ SETUP FILE INFORMATION:
 
  ======== Setup file: /home/eldering/sched/setups/lba3cm-2p-4IF.set
    Matching groups in /home/eldering/sched/catalogs/freq_RDBE.dat:
-     hh_g            Generated from sess119SX5-X5nme.setini, sess119XGglob.setini, sess119XG.setini,*
+     hh4cm_g         Generated from evn4cm-4Gbps-32MHz.set
 
-   Setup group:    7         Station: HART              Total bit rate:   512
+   Setup group:    8         Station: HART              Total bit rate:   512
    Format: MARK5B            Bits per sample: 2         Sample rate: 32.000
    Number of channels:  8    DBE type: DBBC_DDC         Speedup factor:   1.00
 
@@ -223,9 +223,9 @@ SOURCE SCAN SUMMARY FOR SOURCES LISTED ABOVE
      Baseline hours are only counted for scans above horizon at both ends.
   Source       Setup file             Frequency sets                  Observing hours
                                    (duplicates not shown)              Scan  Baseline
-  0437-454   ups/lba3cm-2p-4IF.set 1 2 4 5 6 7 9 10                  0.600    25.725
-  0438-436   ups/lba3cm-2p-4IF.set 1 2 4 5 6 7 9 10                  1.417    56.974
-  0537-441   ups/lba3cm-2p-4IF.set 1 2 4 5 6 7 9 10                  0.333    13.486
+  0437-454   ups/lba3cm-2p-4IF.set 1 2 4 5 6 7 8 9 10                0.600    25.752
+  0438-436   ups/lba3cm-2p-4IF.set 1 2 4 5 6 7 8 9 10                1.417    57.354
+  0537-441   ups/lba3cm-2p-4IF.set 1 2 4 5 6 7 8 9 10                0.333    13.486
 
 
 EFFECT OF SOLAR CORONA

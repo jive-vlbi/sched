@@ -1,11 +1,11 @@
 VEX_rev = 2.0;
-*    pySCHED version: 1.28.3
+*    pySCHED version: 1.28.5
 *    SCHED version:   Release 12.0; March 2025
 *    VEX/SCHED:       2.0.5
 *    Other versions: Sched:  12.0 JPL-ephem: 1.01
 *    Catalog versions:
-*       Frequency: 2025Apr01-08:26:36
-*       Station:   2025Oct02-13:31:06
+*       Frequency: 2026May21-10:03:53
+*       Station:   2026May07-13:48:02
 *       Location:  2020Jan12
 *------------------------------------------------------------------------------
 $GLOBAL;
@@ -60,9 +60,9 @@ def eg1024-1024;
      ref $IF = LO@4100MHzDPolTone/1:Ef;
      ref $IF = LO@4100MHzDPolTone/1#02:O8;
      ref $IF = LO@4200MHzDPolTone/1:Tr;
-     ref $IF = LO@4344MHzDPolTone/1:Mc;
+     ref $IF = LO@4356MHzDPolTone/1:Mc;
      ref $IF = LO@4587MHzDPolTone/1:Wb;
-     ref $IF = LO@4600MHzDPolTone/1:Nt;
+     ref $IF = LO@4612MHzDPolTone/1:Nt;
      ref $IF = LO@5664MHzDPolTone/1:Cm:Jb;
      ref $BBC = 4BBCs:Cm;
      ref $BBC = 8BBCs:Ef;
@@ -98,10 +98,10 @@ def LO@4200MHzDPolTone/1;
      if_def = &IF_B1 :  : L :   4200.00 MHz : U : 1 MHz;
 enddef;
 *
-def LO@4344MHzDPolTone/1;
+def LO@4356MHzDPolTone/1;
 * eg1024-1024: Mc
-     if_def = &IF_A1 :  : R :   4344.00 MHz : U : 1 MHz;
-     if_def = &IF_C1 :  : L :   4344.00 MHz : U : 1 MHz;
+     if_def = &IF_A1 :  : R :   4356.00 MHz : U : 1 MHz;
+     if_def = &IF_C1 :  : L :   4356.00 MHz : U : 1 MHz;
 enddef;
 *
 def LO@4587MHzDPolTone/1;
@@ -110,10 +110,10 @@ def LO@4587MHzDPolTone/1;
      if_def = &IF_B1 :  : L :   4587.00 MHz : U : 1 MHz;
 enddef;
 *
-def LO@4600MHzDPolTone/1;
+def LO@4612MHzDPolTone/1;
 * eg1024-1024: Nt
-     if_def = &IF_A1 :  : R :   4600.00 MHz : U : 1 MHz;
-     if_def = &IF_C2 :  : L :   4600.00 MHz : U : 1 MHz;
+     if_def = &IF_A1 :  : R :   4612.00 MHz : U : 1 MHz;
+     if_def = &IF_C2 :  : L :   4612.00 MHz : U : 1 MHz;
 enddef;
 *
 def LO@5664MHzDPolTone/1;
@@ -421,14 +421,11 @@ enddef;
 *
 def TORUN;
      axis_type = az : el;
-     antenna_motion = az :   30.0 deg/min : 5 sec;
-     antenna_motion = el :   16.0 deg/min : 5 sec;
-     pointing_sector =  &ccw : az : -80.0 deg :  80.0 deg : el :  3.0 deg : 90.0 deg :  ccw;
-     pointing_sector =    &n : az :  80.0 deg : 280.0 deg : el :  3.0 deg : 90.0 deg :    n;
-     pointing_sector =   &cw : az : 280.0 deg : 440.0 deg : el :  3.0 deg : 90.0 deg :   cw;
-     pointing_sector = &ccwp : az : -80.0 deg :  80.0 deg : el : 90.0 deg : 93.0 deg : ccwp;
-     pointing_sector =   &np : az :  80.0 deg : 280.0 deg : el : 90.0 deg : 93.0 deg :   np;
-     pointing_sector =  &cwp : az : 280.0 deg : 440.0 deg : el : 90.0 deg : 93.0 deg :  cwp;
+     antenna_motion = az :   30.0 deg/min : 21 sec;
+     antenna_motion = el :   17.0 deg/min : 21 sec;
+     pointing_sector = &ccw : az : -90.0 deg :  90.0 deg : el : 3.0 deg : 88.0 deg : ccw;
+     pointing_sector =   &n : az :  90.0 deg : 270.0 deg : el : 3.0 deg : 88.0 deg :   n;
+     pointing_sector =  &cw : az : 270.0 deg : 450.0 deg : el : 3.0 deg : 88.0 deg :  cw;
      axis_offset =        0.0 m;
 enddef;
 *
@@ -586,7 +583,7 @@ scan No0003;
      station = Wb :  0 sec : 90 sec :   169.230 GB :  :     : 1;
      station = Nt :  0 sec : 90 sec :   169.230 GB :  : &cw : 1;
      station = Mc :  0 sec : 90 sec :   169.230 GB :  : &cw : 1;
-     station = Tr : 12 sec : 90 sec :   169.230 GB :  : &cw : 1;
+     station = Tr : 23 sec : 90 sec :   169.230 GB :  : &cw : 1;
 endscan;
 *
 scan No0004;
@@ -600,7 +597,7 @@ scan No0004;
      station = Wb : 29 sec : 210 sec :   180.769 GB :  :     : 1;
      station = Nt : 12 sec : 210 sec :   180.769 GB :  : &cw : 1;
      station = Mc : 14 sec : 210 sec :   180.769 GB :  : &cw : 1;
-     station = Tr : 27 sec : 210 sec :   180.769 GB :  :  &n : 1;
+     station = Tr : 38 sec : 210 sec :   180.769 GB :  : &cw : 1;
 endscan;
 *
 scan No0005;
@@ -613,7 +610,7 @@ scan No0005;
      station = Wb : 29 sec : 90 sec :   207.692 GB :  :     : 1;
      station = Nt : 12 sec : 90 sec :   207.692 GB :  : &cw : 1;
      station = Mc : 14 sec : 90 sec :   207.692 GB :  : &cw : 1;
-     station = Tr : 27 sec : 90 sec :   207.692 GB :  : &cw : 1;
+     station = Tr : 38 sec : 90 sec :   207.692 GB :  : &cw : 1;
 endscan;
 *
 scan No0006;
@@ -627,7 +624,7 @@ scan No0006;
      station = Wb : 29 sec : 210 sec :   219.230 GB :  :     : 1;
      station = Nt : 12 sec : 210 sec :   219.230 GB :  : &cw : 1;
      station = Mc : 14 sec : 210 sec :   219.230 GB :  : &cw : 1;
-     station = Tr : 26 sec : 210 sec :   219.230 GB :  :  &n : 1;
+     station = Tr : 38 sec : 210 sec :   219.230 GB :  : &cw : 1;
 endscan;
 *
 scan No0007;
@@ -641,7 +638,7 @@ scan No0007;
      station = Wb : 29 sec : 90 sec :   246.153 GB :  :     : 1;
      station = Nt : 12 sec : 90 sec :   246.153 GB :  : &cw : 1;
      station = Mc : 13 sec : 90 sec :   246.153 GB :  : &cw : 1;
-     station = Tr : 27 sec : 90 sec :   246.153 GB :  : &cw : 1;
+     station = Tr : 38 sec : 90 sec :   246.153 GB :  : &cw : 1;
 endscan;
 *
 scan No0008;
@@ -655,7 +652,7 @@ scan No0008;
      station = Wb : 29 sec : 210 sec :   257.692 GB :  :     : 1;
      station = Nt : 11 sec : 210 sec :   257.692 GB :  : &cw : 1;
      station = Mc : 13 sec : 210 sec :   257.692 GB :  : &cw : 1;
-     station = Tr : 26 sec : 210 sec :   257.692 GB :  :  &n : 1;
+     station = Tr : 38 sec : 210 sec :   257.692 GB :  : &cw : 1;
 endscan;
 *
 scan No0009;
@@ -682,7 +679,7 @@ scan No0010;
      station = Wb : 29 sec : 210 sec :   296.153 GB :  :     : 1;
      station = Nt : 11 sec : 210 sec :   296.153 GB :  : &cw : 1;
      station = Mc : 13 sec : 210 sec :   296.153 GB :  : &cw : 1;
-     station = Tr : 26 sec : 210 sec :   296.153 GB :  :  &n : 1;
+     station = Tr : 37 sec : 210 sec :   296.153 GB :  : &cw : 1;
 endscan;
 *
 scan No0011;
@@ -696,7 +693,7 @@ scan No0011;
      station = Wb : 29 sec : 90 sec :   323.076 GB :  :     : 1;
      station = Nt : 11 sec : 90 sec :   323.076 GB :  : &cw : 1;
      station = Mc : 13 sec : 90 sec :   323.076 GB :  : &cw : 1;
-     station = Tr : 26 sec : 90 sec :   323.076 GB :  : &cw : 1;
+     station = Tr : 38 sec : 90 sec :   323.076 GB :  : &cw : 1;
 endscan;
 *
 scan No0012;
@@ -710,7 +707,7 @@ scan No0012;
      station = Wb : 29 sec : 210 sec :   334.615 GB :  :     : 1;
      station = Nt : 11 sec : 210 sec :   334.615 GB :  : &cw : 1;
      station = Mc : 13 sec : 210 sec :   334.615 GB :  : &cw : 1;
-     station = Tr : 26 sec : 210 sec :   334.615 GB :  :  &n : 1;
+     station = Tr : 37 sec : 210 sec :   334.615 GB :  : &cw : 1;
 endscan;
 *
 scan No0013;
@@ -723,7 +720,7 @@ scan No0013;
      station = Wb : 29 sec : 90 sec :   361.538 GB :  :     : 1;
      station = Nt : 11 sec : 90 sec :   361.538 GB :  : &cw : 1;
      station = Mc : 13 sec : 90 sec :   361.538 GB :  : &cw : 1;
-     station = Tr : 26 sec : 90 sec :   361.538 GB :  : &cw : 1;
+     station = Tr : 37 sec : 90 sec :   361.538 GB :  : &cw : 1;
 endscan;
 *
 scan No0014;
@@ -737,7 +734,7 @@ scan No0014;
      station = Wb : 29 sec : 210 sec :   373.076 GB :  :     : 1;
      station = Nt : 11 sec : 210 sec :   373.076 GB :  : &cw : 1;
      station = Mc : 13 sec : 210 sec :   373.076 GB :  : &cw : 1;
-     station = Tr : 26 sec : 210 sec :   373.076 GB :  : &cw : 1;
+     station = Tr : 37 sec : 210 sec :   373.076 GB :  : &cw : 1;
 endscan;
 *
 scan No0015;
@@ -765,7 +762,7 @@ scan No0016;
      station = Wb : 29 sec : 210 sec :   411.537 GB :  :     : 1;
      station = Nt : 11 sec : 210 sec :   411.537 GB :  : &cw : 1;
      station = Mc : 12 sec : 210 sec :   411.537 GB :  : &cw : 1;
-     station = Tr : 26 sec : 210 sec :   411.537 GB :  : &cw : 1;
+     station = Tr : 37 sec : 210 sec :   411.537 GB :  : &cw : 1;
 endscan;
 *
 scan No0017;
@@ -778,7 +775,7 @@ scan No0017;
      station = Wb : 29 sec : 90 sec :   438.460 GB :  :     : 1;
      station = Nt : 11 sec : 90 sec :   438.460 GB :  : &cw : 1;
      station = Mc : 12 sec : 90 sec :   438.460 GB :  : &cw : 1;
-     station = Tr : 25 sec : 90 sec :   438.460 GB :  : &cw : 1;
+     station = Tr : 37 sec : 90 sec :   438.460 GB :  : &cw : 1;
 endscan;
 *
 scan No0018;
@@ -792,7 +789,7 @@ scan No0018;
      station = Wb : 29 sec : 210 sec :   449.999 GB :  :     : 1;
      station = Nt : 10 sec : 210 sec :   449.999 GB :  : &cw : 1;
      station = Mc : 12 sec : 210 sec :   449.999 GB :  : &cw : 1;
-     station = Tr : 26 sec : 210 sec :   449.999 GB :  : &cw : 1;
+     station = Tr : 38 sec : 210 sec :   449.999 GB :  : &cw : 1;
 endscan;
 *
 scan No0019;
@@ -806,7 +803,7 @@ scan No0019;
      station = Wb : 29 sec : 90 sec :   476.922 GB :  :     : 1;
      station = Nt : 10 sec : 90 sec :   476.922 GB :  : &cw : 1;
      station = Mc : 12 sec : 90 sec :   476.922 GB :  : &cw : 1;
-     station = Tr : 25 sec : 90 sec :   476.922 GB :  : &cw : 1;
+     station = Tr : 37 sec : 90 sec :   476.922 GB :  : &cw : 1;
 endscan;
 *
 scan No0020;
@@ -820,7 +817,7 @@ scan No0020;
      station = Wb : 29 sec : 210 sec :   488.460 GB :  :     : 1;
      station = Nt : 10 sec : 210 sec :   488.460 GB :  : &cw : 1;
      station = Mc : 12 sec : 210 sec :   488.460 GB :  : &cw : 1;
-     station = Tr : 26 sec : 210 sec :   488.460 GB :  : &cw : 1;
+     station = Tr : 38 sec : 210 sec :   488.460 GB :  : &cw : 1;
 endscan;
 *
 scan No0021;
@@ -847,7 +844,7 @@ scan No0022;
      station = Wb : 29 sec : 210 sec :   526.922 GB :  :     : 1;
      station = Nt : 10 sec : 210 sec :   526.922 GB :  : &cw : 1;
      station = Mc : 12 sec : 210 sec :   526.922 GB :  : &cw : 1;
-     station = Tr : 26 sec : 210 sec :   526.922 GB :  : &cw : 1;
+     station = Tr : 38 sec : 210 sec :   526.922 GB :  : &cw : 1;
 endscan;
 *
 scan No0023;
@@ -861,7 +858,7 @@ scan No0023;
      station = Wb : 29 sec : 90 sec :   553.845 GB :  :     : 1;
      station = Nt : 10 sec : 90 sec :   553.845 GB :  : &cw : 1;
      station = Mc : 12 sec : 90 sec :   553.845 GB :  : &cw : 1;
-     station = Tr : 26 sec : 90 sec :   553.845 GB :  : &cw : 1;
+     station = Tr : 37 sec : 90 sec :   553.845 GB :  : &cw : 1;
 endscan;
 *
 scan No0024;
@@ -875,7 +872,7 @@ scan No0024;
      station = Wb : 29 sec : 210 sec :   565.383 GB :  :     : 1;
      station = Nt : 10 sec : 210 sec :   565.383 GB :  : &cw : 1;
      station = Mc : 12 sec : 210 sec :   565.383 GB :  : &cw : 1;
-     station = Tr : 26 sec : 210 sec :   565.383 GB :  : &cw : 1;
+     station = Tr : 38 sec : 210 sec :   565.383 GB :  : &cw : 1;
 endscan;
 *
 scan No0025;
@@ -888,7 +885,7 @@ scan No0025;
      station = Wb : 29 sec : 90 sec :   592.306 GB :  :     : 1;
      station = Nt : 10 sec : 90 sec :   592.306 GB :  : &cw : 1;
      station = Mc : 12 sec : 90 sec :   592.306 GB :  : &cw : 1;
-     station = Tr : 26 sec : 90 sec :   592.306 GB :  : &cw : 1;
+     station = Tr : 38 sec : 90 sec :   592.306 GB :  : &cw : 1;
 endscan;
 *
 scan No0026;
@@ -902,7 +899,7 @@ scan No0026;
      station = Wb : 29 sec : 210 sec :   603.845 GB :  :     : 1;
      station = Nt : 10 sec : 210 sec :   603.845 GB :  : &cw : 1;
      station = Mc : 12 sec : 210 sec :   603.845 GB :  : &cw : 1;
-     station = Tr : 26 sec : 210 sec :   603.845 GB :  : &cw : 1;
+     station = Tr : 38 sec : 210 sec :   603.845 GB :  : &cw : 1;
 endscan;
 *
 scan No0027;
@@ -930,7 +927,7 @@ scan No0028;
      station = Wb : 29 sec : 210 sec :   642.306 GB :  :     : 1;
      station = Nt : 10 sec : 210 sec :   642.306 GB :  : &cw : 1;
      station = Mc : 11 sec : 210 sec :   642.306 GB :  : &cw : 1;
-     station = Tr : 26 sec : 210 sec :   642.306 GB :  : &cw : 1;
+     station = Tr : 38 sec : 210 sec :   642.306 GB :  : &cw : 1;
 endscan;
 *
 scan No0029;
@@ -943,7 +940,7 @@ scan No0029;
      station = Wb : 29 sec : 90 sec :   669.229 GB :  :     : 1;
      station = Nt : 10 sec : 90 sec :   669.229 GB :  : &cw : 1;
      station = Mc : 11 sec : 90 sec :   669.229 GB :  : &cw : 1;
-     station = Tr : 26 sec : 90 sec :   669.229 GB :  : &cw : 1;
+     station = Tr : 38 sec : 90 sec :   669.229 GB :  : &cw : 1;
 endscan;
 *
 scan No0030;
@@ -957,7 +954,7 @@ scan No0030;
      station = Wb : 29 sec : 210 sec :   680.768 GB :  :     : 1;
      station = Nt : 10 sec : 210 sec :   680.768 GB :  : &cw : 1;
      station = Mc : 11 sec : 210 sec :   680.768 GB :  : &cw : 1;
-     station = Tr : 26 sec : 210 sec :   680.768 GB :  : &cw : 1;
+     station = Tr : 38 sec : 210 sec :   680.768 GB :  : &cw : 1;
 endscan;
 *
 scan No0031;
@@ -971,7 +968,7 @@ scan No0031;
      station = Wb : 29 sec : 90 sec :   707.691 GB :  :     : 1;
      station = Nt : 10 sec : 90 sec :   707.691 GB :  : &cw : 1;
      station = Mc : 11 sec : 90 sec :   707.691 GB :  : &cw : 1;
-     station = Tr : 26 sec : 90 sec :   707.691 GB :  : &cw : 1;
+     station = Tr : 38 sec : 90 sec :   707.691 GB :  : &cw : 1;
 endscan;
 *
 scan No0032;
@@ -985,7 +982,7 @@ scan No0032;
      station = Wb : 29 sec : 210 sec :   719.229 GB :  :     : 1;
      station = Nt :  9 sec : 210 sec :   719.229 GB :  : &cw : 1;
      station = Mc : 11 sec : 210 sec :   719.229 GB :  : &cw : 1;
-     station = Tr : 26 sec : 210 sec :   719.229 GB :  : &cw : 1;
+     station = Tr : 38 sec : 210 sec :   719.229 GB :  : &cw : 1;
 endscan;
 *
 scan No0033;
@@ -1012,7 +1009,7 @@ scan No0034;
      station = Wb : 29 sec : 210 sec :   757.691 GB :  :     : 1;
      station = Nt :  9 sec : 210 sec :   757.691 GB :  : &cw : 1;
      station = Mc : 11 sec : 210 sec :   757.691 GB :  : &cw : 1;
-     station = Tr : 26 sec : 210 sec :   757.691 GB :  : &cw : 1;
+     station = Tr : 38 sec : 210 sec :   757.691 GB :  : &cw : 1;
 endscan;
 *
 scan No0035;
@@ -1026,7 +1023,7 @@ scan No0035;
      station = Wb : 29 sec : 90 sec :   784.614 GB :  :     : 1;
      station = Nt :  9 sec : 90 sec :   784.614 GB :  : &cw : 1;
      station = Mc : 11 sec : 90 sec :   784.614 GB :  : &cw : 1;
-     station = Tr : 26 sec : 90 sec :   784.614 GB :  : &cw : 1;
+     station = Tr : 38 sec : 90 sec :   784.614 GB :  : &cw : 1;
 endscan;
 *
 scan No0036;
@@ -1040,7 +1037,7 @@ scan No0036;
      station = Wb : 29 sec : 210 sec :   796.152 GB :  :     : 1;
      station = Nt :  9 sec : 210 sec :   796.152 GB :  : &cw : 1;
      station = Mc : 11 sec : 210 sec :   796.152 GB :  : &cw : 1;
-     station = Tr : 26 sec : 210 sec :   796.152 GB :  : &cw : 1;
+     station = Tr : 38 sec : 210 sec :   796.152 GB :  : &cw : 1;
 endscan;
 *
 scan No0037;
@@ -1053,7 +1050,7 @@ scan No0037;
      station = Wb : 29 sec : 90 sec :   823.075 GB :  :     : 1;
      station = Nt :  9 sec : 90 sec :   823.075 GB :  : &cw : 1;
      station = Mc : 11 sec : 90 sec :   823.075 GB :  : &cw : 1;
-     station = Tr : 26 sec : 90 sec :   823.075 GB :  : &cw : 1;
+     station = Tr : 38 sec : 90 sec :   823.075 GB :  : &cw : 1;
 endscan;
 *
 scan No0038;
@@ -1067,7 +1064,7 @@ scan No0038;
      station = Wb : 29 sec : 210 sec :   834.614 GB :  :     : 1;
      station = Nt :  9 sec : 210 sec :   834.614 GB :  : &cw : 1;
      station = Mc : 11 sec : 210 sec :   834.614 GB :  : &cw : 1;
-     station = Tr : 26 sec : 210 sec :   834.614 GB :  : &cw : 1;
+     station = Tr : 38 sec : 210 sec :   834.614 GB :  : &cw : 1;
 endscan;
 *
 scan No0039;
@@ -1095,7 +1092,7 @@ scan No0040;
      station = Wb : 29 sec : 210 sec :   873.075 GB :  :     : 1;
      station = Nt :  9 sec : 210 sec :   873.075 GB :  : &cw : 1;
      station = Mc : 11 sec : 210 sec :   873.075 GB :  : &cw : 1;
-     station = Tr : 27 sec : 210 sec :   873.075 GB :  : &cw : 1;
+     station = Tr : 38 sec : 210 sec :   873.075 GB :  : &cw : 1;
 endscan;
 *
 scan No0041;
@@ -1108,7 +1105,7 @@ scan No0041;
      station = Wb : 29 sec : 90 sec :   899.998 GB :  :     : 1;
      station = Nt :  9 sec : 90 sec :   899.998 GB :  : &cw : 1;
      station = Mc : 11 sec : 90 sec :   899.998 GB :  : &cw : 1;
-     station = Tr : 26 sec : 90 sec :   899.998 GB :  : &cw : 1;
+     station = Tr : 38 sec : 90 sec :   899.998 GB :  : &cw : 1;
 endscan;
 *
 scan No0042;
@@ -1122,7 +1119,7 @@ scan No0042;
      station = Wb : 29 sec : 210 sec :   911.537 GB :  :     : 1;
      station = Nt :  9 sec : 210 sec :   911.537 GB :  : &cw : 1;
      station = Mc : 11 sec : 210 sec :   911.537 GB :  : &cw : 1;
-     station = Tr : 27 sec : 210 sec :   911.537 GB :  : &cw : 1;
+     station = Tr : 38 sec : 210 sec :   911.537 GB :  : &cw : 1;
 endscan;
 *
 scan No0043;
@@ -1136,7 +1133,7 @@ scan No0043;
      station = Wb : 29 sec : 90 sec :   938.460 GB :  :     : 1;
      station = Nt :  9 sec : 90 sec :   938.460 GB :  : &cw : 1;
      station = Mc : 10 sec : 90 sec :   938.460 GB :  : &cw : 1;
-     station = Tr : 26 sec : 90 sec :   938.460 GB :  : &cw : 1;
+     station = Tr : 38 sec : 90 sec :   938.460 GB :  : &cw : 1;
 endscan;
 *
 scan No0044;
@@ -1150,7 +1147,7 @@ scan No0044;
      station = Wb : 29 sec : 210 sec :   949.998 GB :  :     : 1;
      station = Nt :  9 sec : 210 sec :   949.998 GB :  : &cw : 1;
      station = Mc : 10 sec : 210 sec :   949.998 GB :  : &cw : 1;
-     station = Tr : 27 sec : 210 sec :   949.998 GB :  : &cw : 1;
+     station = Tr : 39 sec : 210 sec :   949.998 GB :  : &cw : 1;
 endscan;
 *
 scan No0045;
@@ -1177,7 +1174,7 @@ scan No0046;
      station = Wb : 29 sec : 210 sec :   988.460 GB :  :     : 1;
      station = Nt :  9 sec : 210 sec :   988.460 GB :  : &cw : 1;
      station = Mc : 10 sec : 210 sec :   988.460 GB :  : &cw : 1;
-     station = Tr : 27 sec : 210 sec :   988.460 GB :  : &cw : 1;
+     station = Tr : 39 sec : 210 sec :   988.460 GB :  : &cw : 1;
 endscan;
 *
 scan No0047;
@@ -1191,7 +1188,7 @@ scan No0047;
      station = Wb : 29 sec : 90 sec :  1015.383 GB :  :     : 1;
      station = Nt :  9 sec : 90 sec :  1015.383 GB :  : &cw : 1;
      station = Mc : 10 sec : 90 sec :  1015.383 GB :  : &cw : 1;
-     station = Tr : 27 sec : 90 sec :  1015.383 GB :  : &cw : 1;
+     station = Tr : 38 sec : 90 sec :  1015.383 GB :  : &cw : 1;
 endscan;
 *
 scan No0048;
@@ -1205,7 +1202,7 @@ scan No0048;
      station = Wb : 29 sec : 210 sec :  1026.921 GB :  :     : 1;
      station = Nt :  9 sec : 210 sec :  1026.921 GB :  : &cw : 1;
      station = Mc : 10 sec : 210 sec :  1026.921 GB :  : &cw : 1;
-     station = Tr : 27 sec : 210 sec :  1026.921 GB :  : &cw : 1;
+     station = Tr : 39 sec : 210 sec :  1026.921 GB :  : &cw : 1;
 endscan;
 *
 scan No0049;
@@ -1218,7 +1215,7 @@ scan No0049;
      station = Wb : 29 sec : 90 sec :  1053.844 GB :  :     : 1;
      station = Nt :  8 sec : 90 sec :  1053.844 GB :  : &cw : 1;
      station = Mc : 10 sec : 90 sec :  1053.844 GB :  : &cw : 1;
-     station = Tr : 27 sec : 90 sec :  1053.844 GB :  : &cw : 1;
+     station = Tr : 38 sec : 90 sec :  1053.844 GB :  : &cw : 1;
 endscan;
 *
 scan No0050;
@@ -1232,7 +1229,7 @@ scan No0050;
      station = Wb : 29 sec : 210 sec :  1065.382 GB :  :     : 1;
      station = Nt :  8 sec : 210 sec :  1065.382 GB :  : &cw : 1;
      station = Mc : 10 sec : 210 sec :  1065.382 GB :  : &cw : 1;
-     station = Tr : 27 sec : 210 sec :  1065.382 GB :  : &cw : 1;
+     station = Tr : 39 sec : 210 sec :  1065.382 GB :  : &cw : 1;
 endscan;
 *
 scan No0051;

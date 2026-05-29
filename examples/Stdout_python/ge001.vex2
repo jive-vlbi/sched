@@ -1,11 +1,11 @@
 VEX_rev = 2.0;
-*    pySCHED version: 1.28.3
+*    pySCHED version: 1.28.5
 *    SCHED version:   Release 12.0; March 2025
 *    VEX/SCHED:       2.0.5
 *    Other versions: Sched:  12.0 JPL-ephem: 1.01
 *    Catalog versions:
-*       Frequency: 2025Apr01-08:26:36
-*       Station:   2025Oct02-13:31:06
+*       Frequency: 2026May21-10:03:53
+*       Station:   2026May07-13:48:02
 *       Location:  2020Jan12
 *------------------------------------------------------------------------------
 $GLOBAL;
@@ -74,9 +74,9 @@ def v6cm-256-8-2-UL;
      ref $IF = LO@4100MHzDPolTone/1:Ef;
      ref $IF = LO@4100MHzDPolTone/1#02:O8;
      ref $IF = LO@4200MHzDPolTone/1:Tr;
-     ref $IF = LO@4344MHzDPolTone/1:Mc;
+     ref $IF = LO@4356MHzDPolTone/1:Mc;
      ref $IF = LO@4587MHzDPolTone/1:Wb;
-     ref $IF = LO@4600MHzDPolTone/1:Nt;
+     ref $IF = LO@4612MHzDPolTone/1:Nt;
      ref $IF = LO@5600MHzDPolTone/1:Br:Fd:Gb:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc;
      ref $IF = LO@5664MHzDPolTone/1:Jb;
      ref $BBC = 4BBCs:Br:Fd:Gb:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc;
@@ -113,10 +113,10 @@ def LO@4200MHzDPolTone/1;
      if_def = &IF_B1 :  : L :   4200.00 MHz : U : 1 MHz;
 enddef;
 *
-def LO@4344MHzDPolTone/1;
+def LO@4356MHzDPolTone/1;
 * v6cm-256-8-2-UL: Mc
-     if_def = &IF_A1 :  : R :   4344.00 MHz : U : 1 MHz;
-     if_def = &IF_C1 :  : L :   4344.00 MHz : U : 1 MHz;
+     if_def = &IF_A1 :  : R :   4356.00 MHz : U : 1 MHz;
+     if_def = &IF_C1 :  : L :   4356.00 MHz : U : 1 MHz;
 enddef;
 *
 def LO@4587MHzDPolTone/1;
@@ -125,10 +125,10 @@ def LO@4587MHzDPolTone/1;
      if_def = &IF_B1 :  : L :   4587.00 MHz : U : 1 MHz;
 enddef;
 *
-def LO@4600MHzDPolTone/1;
+def LO@4612MHzDPolTone/1;
 * v6cm-256-8-2-UL: Nt
-     if_def = &IF_A1 :  : R :   4600.00 MHz : U : 1 MHz;
-     if_def = &IF_C2 :  : L :   4600.00 MHz : U : 1 MHz;
+     if_def = &IF_A1 :  : R :   4612.00 MHz : U : 1 MHz;
+     if_def = &IF_C2 :  : L :   4612.00 MHz : U : 1 MHz;
 enddef;
 *
 def LO@5600MHzDPolTone/1;
@@ -465,14 +465,11 @@ enddef;
 *
 def TORUN;
      axis_type = az : el;
-     antenna_motion = az :   30.0 deg/min : 5 sec;
-     antenna_motion = el :   16.0 deg/min : 5 sec;
-     pointing_sector =  &ccw : az : -80.0 deg :  80.0 deg : el :  3.0 deg : 90.0 deg :  ccw;
-     pointing_sector =    &n : az :  80.0 deg : 280.0 deg : el :  3.0 deg : 90.0 deg :    n;
-     pointing_sector =   &cw : az : 280.0 deg : 440.0 deg : el :  3.0 deg : 90.0 deg :   cw;
-     pointing_sector = &ccwp : az : -80.0 deg :  80.0 deg : el : 90.0 deg : 93.0 deg : ccwp;
-     pointing_sector =   &np : az :  80.0 deg : 280.0 deg : el : 90.0 deg : 93.0 deg :   np;
-     pointing_sector =  &cwp : az : 280.0 deg : 440.0 deg : el : 90.0 deg : 93.0 deg :  cwp;
+     antenna_motion = az :   30.0 deg/min : 21 sec;
+     antenna_motion = el :   17.0 deg/min : 21 sec;
+     pointing_sector = &ccw : az : -90.0 deg :  90.0 deg : el : 3.0 deg : 88.0 deg : ccw;
+     pointing_sector =   &n : az :  90.0 deg : 270.0 deg : el : 3.0 deg : 88.0 deg :   n;
+     pointing_sector =  &cw : az : 270.0 deg : 450.0 deg : el : 3.0 deg : 88.0 deg :  cw;
      axis_offset =        0.0 m;
 enddef;
 *
@@ -1006,7 +1003,7 @@ scan No0009;
      station = Wb : 0 sec : 1325 sec :   339.743 GB :  :      : 1;
      station = O8 : 0 sec : 1325 sec :   339.743 GB :  :      : 1;
      station = Mc : 0 sec : 1325 sec :   339.743 GB :  :  &cw : 1;
-     station = Tr : 0 sec : 1325 sec :   339.743 GB :  :   &n : 1;
+     station = Tr : 0 sec : 1325 sec :   339.743 GB :  :  &cw : 1;
      station = Nt : 0 sec : 1325 sec :   339.743 GB :  : &ccw : 1;
 endscan;
 *
@@ -1029,7 +1026,7 @@ scan No0010;
      station = Wb : 0 sec : 1325 sec :   382.211 GB :  :      : 1;
      station = O8 : 0 sec : 1325 sec :   382.211 GB :  :      : 1;
      station = Mc : 0 sec : 1325 sec :   382.211 GB :  :  &cw : 1;
-     station = Tr : 0 sec : 1325 sec :   382.211 GB :  :   &n : 1;
+     station = Tr : 0 sec : 1325 sec :   382.211 GB :  :  &cw : 1;
      station = Nt : 0 sec : 1325 sec :   382.211 GB :  : &ccw : 1;
 endscan;
 *
@@ -1460,7 +1457,7 @@ scan No0030;
      station = Wb : 0 sec : 1325 sec :   637.018 GB :  :      : 1;
      station = O8 : 0 sec : 1325 sec :  1231.568 GB :  :      : 1;
      station = Mc : 0 sec : 1325 sec :   849.357 GB :  :  &cw : 1;
-     station = Tr : 0 sec : 1325 sec :  1189.100 GB :  :   &n : 1;
+     station = Tr : 2 sec : 1325 sec :  1189.100 GB :  :  &cw : 1;
      station = Nt : 0 sec : 1325 sec :   721.953 GB :  : &ccw : 1;
 endscan;
 *
@@ -1479,7 +1476,7 @@ scan No0031;
      station = Mk :   0 sec : 1325 sec :   769.306 GB :  : &ccw : 1;
      station = Jb : 511 sec : 1325 sec :  1274.035 GB :  :   &n : 1;
      station = O8 : 442 sec : 1325 sec :  1274.035 GB :  :      : 1;
-     station = Tr :  10 sec : 1325 sec :  1231.568 GB :  :  &cw : 1;
+     station = Tr :  22 sec : 1325 sec :  1231.568 GB :  :  &cw : 1;
 endscan;
 *
 scan No0032;

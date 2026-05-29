@@ -375,11 +375,11 @@ SOURCE SCAN SUMMARY FOR SOURCES LISTED ABOVE
                                    (duplicates not shown)              Scan  Baseline
   0823-500   oh.set                1 2 3 4                           0.083     0.500
   1148-671   oh.set                1 2 3 4                           0.117     0.487
-  1215-457   oh.set                1 2 3 4                           0.917     4.188
-  1740-517   oh.set                1 2 3 4                           1.583     6.732
-  G337.705   oh.set                1 2 3 4                           6.000    31.520
-  G300.969   oh.set                1 2 3 4                           6.717    35.398
-  1934-638   oh.set                1 2 3 4                           0.667     3.897
+  1215-457   oh.set                1 2 3 4                           0.917     4.227
+  1740-517   oh.set                1 2 3 4                           1.583     6.765
+  G337.705   oh.set                1 2 3 4                           6.000    31.546
+  G300.969   oh.set                1 2 3 4                           6.717    35.440
+  1934-638   oh.set                1 2 3 4                           0.667     3.904
 
 
 EFFECT OF SOLAR CORONA

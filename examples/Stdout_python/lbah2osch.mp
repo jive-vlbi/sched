@@ -762,12 +762,12 @@ SOURCE SCAN SUMMARY FOR SOURCES LISTED ABOVE
      Baseline hours are only counted for scans above horizon at both ends.
   Source       Setup file             Frequency sets                  Observing hours
                                    (duplicates not shown)              Scan  Baseline
-  G330.95-0.1water.set             6 7 8 9 10                        3.889    36.606
+  G330.95-0.1water.set             6 7 8 9 10                        3.889    36.677
   G331.51-0.1water.set             1 2 3 4 5                         3.889    37.644
-  J1604-4441 water.set             1 2 3 4 5                         2.033    18.664
-  0637-752   water.set             1 2 3 4 5 6 7 8 9 10              0.183     1.626
-  J1427-4206 water.set             1 2 3 4 5                         0.506     3.494
-  1921-293   water.set             1 2 3 4 5 6 7 8 9 10              0.367     3.227
+  J1604-4441 water.set             1 2 3 4 5                         2.033    18.722
+  0637-752   water.set             1 2 3 4 5 6 7 8 9 10              0.183     1.642
+  J1427-4206 water.set             1 2 3 4 5                         0.506     3.523
+  1921-293   water.set             1 2 3 4 5 6 7 8 9 10              0.367     3.253
 
 
 EFFECT OF SOLAR CORONA

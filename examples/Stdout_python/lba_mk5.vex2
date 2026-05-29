@@ -1,11 +1,11 @@
 VEX_rev = 2.0;
-*    pySCHED version: 1.28.3
+*    pySCHED version: 1.28.5
 *    SCHED version:   Release 12.0; March 2025
 *    VEX/SCHED:       2.0.5
 *    Other versions: Sched:  12.0 JPL-ephem: 1.01
 *    Catalog versions:
-*       Frequency: 2025Apr01-08:26:36
-*       Station:   2025Oct02-13:31:06
+*       Frequency: 2026May21-10:03:53
+*       Station:   2026May07-13:48:02
 *       Location:  2020Jan12
 *------------------------------------------------------------------------------
 $GLOBAL;
@@ -57,29 +57,28 @@ enddef;
 $MODE;
 *
 def lba3cm-2p-4IF;
-     ref $IF = LO@7600MHzDPolNoTone:Ke:Yg;
+     ref $IF = LO@7600MHzDPolNoTone:Ke;
      ref $IF = LO@7600MHzDPolNoTone#02:Ww;
+     ref $IF = LO@7600MHzDPolNoTone#03:Yg;
      ref $IF = LO@7800MHzDPolNoTone:At:Mp;
      ref $IF = LO@8000MHzDPolNoTone:Ak;
      ref $IF = LO@8080MHzDPolNoTone:Hh;
      ref $IF = LO@8100MHzDPolNoTone:Pa;
      ref $IF = LO@8800MHzDPolNoTone:Ho;
      ref $IF = LO@9040MHzDPolNoTone:Cd;
-     ref $BBC = 2BBCs:Ak;
-     ref $BBC = 4BBCs:At:Mp:Pa;
-     ref $BBC = 4BBCs#02:Ke:Yg;
+     ref $BBC = 4BBCs:Ak:At:Mp:Pa;
+     ref $BBC = 4BBCs#02:Ke;
+     ref $BBC = 4BBCs#03:Yg;
      ref $BBC = 8BBCs:Cd;
      ref $BBC = 8BBCs#02:Hh;
      ref $BBC = 8BBCs#03:Ho;
      ref $BBC = 8BBCs#04:Ww;
      ref $PHASE_CAL_DETECT = NoDetect:Ak:At:Cd:Hh:Ho:Ke:Mp:Pa:Ww:Yg;
-     ref $FREQ = 8409MHz2x64MHz:Ak;
      ref $FREQ = 8409MHz4x32MHz:Ke:Yg;
-     ref $FREQ = 8409MHz8x16MHz:At:Mp:Pa;
+     ref $FREQ = 8409MHz8x16MHz:Ak:At:Mp:Pa;
      ref $FREQ = 8409MHz8x16MHz#02:Cd:Ww;
      ref $FREQ = 8409MHz8x16MHz#03:Hh:Ho;
-     ref $TRACKS = LBA_AT.2Ch2bit1to1:Ak;
-     ref $TRACKS = LBA_AT.8Ch2bit1to1:At:Mp:Pa;
+     ref $TRACKS = LBA_AT.8Ch2bit1to1:Ak:At:Mp:Pa;
      ref $BITSTREAMS = BS4Ch2Bit:Ke:Yg;
      ref $BITSTREAMS = BS8Ch2Bit:Cd:Ho;
      ref $BITSTREAMS = BS8Ch2Bit#02:Hh:Ww;
@@ -88,15 +87,21 @@ enddef;
 $IF;
 *
 def LO@7600MHzDPolNoTone;
-* lba3cm-2p-4IF: Ke, Yg
-     if_def = &IF_A1 :  : R :   7600.00 MHz : U;
-     if_def = &IF_B1 :  : L :   7600.00 MHz : U;
+* lba3cm-2p-4IF: Ke
+     if_def = &IF_A2 :  : R :   7600.00 MHz : U;
+     if_def = &IF_B2 :  : L :   7600.00 MHz : U;
 enddef;
 *
 def LO@7600MHzDPolNoTone#02;
 * lba3cm-2p-4IF: Ww
      if_def = &IF_A1 :  : R :   7600.00 MHz : U;
      if_def = &IF_B2 :  : L :   7600.00 MHz : U;
+enddef;
+*
+def LO@7600MHzDPolNoTone#03;
+* lba3cm-2p-4IF: Yg
+     if_def = &IF_A1 :  : R :   7600.00 MHz : U;
+     if_def = &IF_B1 :  : L :   7600.00 MHz : U;
 enddef;
 *
 def LO@7800MHzDPolNoTone;
@@ -125,8 +130,8 @@ enddef;
 *
 def LO@8800MHzDPolNoTone;
 * lba3cm-2p-4IF: Ho
-     if_def = &IF_A1 :  : R :   8800.00 MHz : L;
-     if_def = &IF_B1 :  : L :   8800.00 MHz : L;
+     if_def = &IF_A3 :  : R :   8800.00 MHz : L;
+     if_def = &IF_B3 :  : L :   8800.00 MHz : L;
 enddef;
 *
 def LO@9040MHzDPolNoTone;
@@ -137,14 +142,8 @@ enddef;
 *------------------------------------------------------------------------------
 $BBC;
 *
-def 2BBCs;
-* lba3cm-2p-4IF: Ak
-     BBC_assign = &BBC01 : 1 : &IF_2N;
-     BBC_assign = &BBC02 : 2 : &IF_1N;
-enddef;
-*
 def 4BBCs;
-* lba3cm-2p-4IF: At, Mp, Pa
+* lba3cm-2p-4IF: Ak, At, Mp, Pa
      BBC_assign = &BBC01 : 1 : &IF_2N;
      BBC_assign = &BBC02 : 2 : &IF_1N;
      BBC_assign = &BBC03 : 3 : &IF_2N;
@@ -152,7 +151,15 @@ def 4BBCs;
 enddef;
 *
 def 4BBCs#02;
-* lba3cm-2p-4IF: Ke, Yg
+* lba3cm-2p-4IF: Ke
+     BBC_assign = &BBC01 : 1 : &IF_A2;
+     BBC_assign = &BBC05 : 5 : &IF_B2;
+     BBC_assign = &BBC02 : 2 : &IF_A2;
+     BBC_assign = &BBC06 : 6 : &IF_B2;
+enddef;
+*
+def 4BBCs#03;
+* lba3cm-2p-4IF: Yg
      BBC_assign = &BBC01 : 1 : &IF_A1;
      BBC_assign = &BBC05 : 5 : &IF_B1;
      BBC_assign = &BBC02 : 2 : &IF_A1;
@@ -185,14 +192,14 @@ enddef;
 *
 def 8BBCs#03;
 * lba3cm-2p-4IF: Ho
-     BBC_assign = &BBC01 :  1 : &IF_A1;
-     BBC_assign = &BBC09 :  9 : &IF_B1;
-     BBC_assign = &BBC02 :  2 : &IF_A1;
-     BBC_assign = &BBC10 : 10 : &IF_B1;
-     BBC_assign = &BBC03 :  3 : &IF_A1;
-     BBC_assign = &BBC11 : 11 : &IF_B1;
-     BBC_assign = &BBC04 :  4 : &IF_A1;
-     BBC_assign = &BBC12 : 12 : &IF_B1;
+     BBC_assign = &BBC01 :  1 : &IF_A3;
+     BBC_assign = &BBC09 :  9 : &IF_B3;
+     BBC_assign = &BBC02 :  2 : &IF_A3;
+     BBC_assign = &BBC10 : 10 : &IF_B3;
+     BBC_assign = &BBC03 :  3 : &IF_A3;
+     BBC_assign = &BBC11 : 11 : &IF_B3;
+     BBC_assign = &BBC04 :  4 : &IF_A3;
+     BBC_assign = &BBC12 : 12 : &IF_B3;
 enddef;
 *
 def 8BBCs#04;
@@ -216,12 +223,6 @@ enddef;
 *------------------------------------------------------------------------------
 $FREQ;
 *
-def 8409MHz2x64MHz;
-* lba3cm-2p-4IF: Ak
-     chan_def =  : 8409 MHz : U :   64.00 MHz : &CH01 : &BBC01 : &NoCal; * RCP
-     chan_def =  : 8409 MHz : U :   64.00 MHz : &CH02 : &BBC02 : &NoCal; * LCP
-enddef;
-*
 def 8409MHz4x32MHz;
 * lba3cm-2p-4IF: Ke, Yg
      chan_def =  : 8409 MHz : U :   32.00 MHz : &CH01 : &BBC01 : &NoCal; * RCP
@@ -231,7 +232,7 @@ def 8409MHz4x32MHz;
 enddef;
 *
 def 8409MHz8x16MHz;
-* lba3cm-2p-4IF: At, Mp, Pa
+* lba3cm-2p-4IF: Ak, At, Mp, Pa
      chan_def =  : 8409 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &NoCal; * RCP
      chan_def =  : 8409 MHz : U :   16.00 MHz : &CH02 : &BBC02 : &NoCal; * LCP
      chan_def =  : 8425 MHz : U :   16.00 MHz : &CH03 : &BBC01 : &NoCal; * RCP
@@ -268,18 +269,8 @@ enddef;
 *------------------------------------------------------------------------------
 $TRACKS;
 *
-def LBA_AT.2Ch2bit1to1;
-* lba3cm-2p-4IF: Ak
-     track_frame_format = LBA_AT;
-     sample_rate = 128.000 Ms/sec;
-     fanout_def =  : &CH01 : sign : 1 : 0;
-     fanout_def =  : &CH01 :  mag : 1 : 1;
-     fanout_def =  : &CH02 : sign : 1 : 2;
-     fanout_def =  : &CH02 :  mag : 1 : 3;
-enddef;
-*
 def LBA_AT.8Ch2bit1to1;
-* lba3cm-2p-4IF: At, Mp, Pa
+* lba3cm-2p-4IF: Ak, At, Mp, Pa
      track_frame_format = LBA_AT;
      sample_rate =  32.000 Ms/sec;
      fanout_def =  : &CH01 : sign : 1 :  0;
@@ -677,7 +668,7 @@ scan No0002;
      station = At :  0 sec : 120 sec :    38.400 GB :  :  &cw : 1;
      station = Mp :  0 sec : 120 sec :    38.400 GB :  :  &cw : 1;
      station = Ho :  0 sec : 120 sec :    38.461 GB :  :      : 1;
-     station = Cd : 31 sec : 120 sec :    38.461 GB :  :  &cw : 1;
+     station = Cd : 19 sec : 120 sec :    38.461 GB :  :  &cw : 1;
      station = Ww :  0 sec : 120 sec :    38.461 GB :  : &ccw : 1;
      station = Ke :  0 sec : 120 sec :    38.461 GB :  : &ccw : 1;
      station = Yg :  0 sec : 120 sec :    38.461 GB :  : &ccw : 1;
@@ -692,8 +683,8 @@ scan No0003;
      station = Pa : 25 sec : 300 sec :    46.080 GB :  : &ccw : 1;
      station = At : 11 sec : 300 sec :    46.080 GB :  :  &cw : 1;
      station = Mp : 12 sec : 300 sec :    46.080 GB :  :  &cw : 1;
-     station = Ho : 18 sec : 300 sec :    46.154 GB :  :      : 1;
-     station = Cd : 26 sec : 300 sec :    46.154 GB :  :  &cw : 1;
+     station = Ho : 14 sec : 300 sec :    46.154 GB :  :      : 1;
+     station = Cd : 19 sec : 300 sec :    46.154 GB :  :  &cw : 1;
      station = Ww :  5 sec : 300 sec :    46.154 GB :  : &ccw : 1;
      station = Ke :  4 sec : 300 sec :    46.154 GB :  : &ccw : 1;
      station = Yg :  5 sec : 300 sec :    46.154 GB :  : &ccw : 1;
@@ -724,8 +715,8 @@ scan No0005;
      station = Pa : 24 sec : 300 sec :    72.960 GB :  : &ccw : 1;
      station = At : 11 sec : 300 sec :    72.960 GB :  :  &cw : 1;
      station = Mp : 12 sec : 300 sec :    72.960 GB :  :  &cw : 1;
-     station = Ho : 18 sec : 300 sec :    73.077 GB :  :      : 1;
-     station = Cd : 26 sec : 300 sec :    73.077 GB :  :  &cw : 1;
+     station = Ho : 14 sec : 300 sec :    73.077 GB :  :      : 1;
+     station = Cd : 19 sec : 300 sec :    73.077 GB :  :  &cw : 1;
      station = Ww :  5 sec : 300 sec :    73.077 GB :  : &ccw : 1;
      station = Ke :  4 sec : 300 sec :    73.077 GB :  : &ccw : 1;
      station = Yg :  5 sec : 300 sec :    73.077 GB :  : &ccw : 1;
@@ -756,8 +747,8 @@ scan No0007;
      station = Pa : 24 sec : 300 sec :    99.840 GB :  : &ccw : 1;
      station = At : 11 sec : 300 sec :    99.840 GB :  :  &cw : 1;
      station = Mp : 12 sec : 300 sec :    99.840 GB :  :  &cw : 1;
-     station = Ho : 18 sec : 300 sec :   100.000 GB :  :      : 1;
-     station = Cd : 27 sec : 300 sec :   100.000 GB :  :  &cw : 1;
+     station = Ho : 14 sec : 300 sec :   100.000 GB :  :      : 1;
+     station = Cd : 19 sec : 300 sec :   100.000 GB :  :  &cw : 1;
      station = Ww :  5 sec : 300 sec :   100.000 GB :  : &ccw : 1;
      station = Ke :  4 sec : 300 sec :   100.000 GB :  : &ccw : 1;
      station = Yg :  4 sec : 300 sec :   100.000 GB :  : &ccw : 1;
@@ -788,8 +779,8 @@ scan No0009;
      station = Pa : 23 sec : 300 sec :   126.720 GB :  : &ccw : 1;
      station = At : 11 sec : 300 sec :   126.720 GB :  :  &cw : 1;
      station = Mp : 11 sec : 300 sec :   126.720 GB :  :  &cw : 1;
-     station = Ho : 18 sec : 300 sec :   126.923 GB :  :      : 1;
-     station = Cd : 27 sec : 300 sec :   126.923 GB :  :  &cw : 1;
+     station = Ho : 14 sec : 300 sec :   126.923 GB :  :      : 1;
+     station = Cd : 20 sec : 300 sec :   126.923 GB :  :  &cw : 1;
      station = Ww :  5 sec : 300 sec :   126.923 GB :  : &ccw : 1;
      station = Ke :  4 sec : 300 sec :   126.923 GB :  : &ccw : 1;
      station = Yg :  4 sec : 300 sec :   126.923 GB :  : &ccw : 1;
@@ -822,8 +813,8 @@ scan No0011;
      station = Pa : 23 sec : 300 sec :   153.600 GB :  : &ccw : 1;
      station = At : 11 sec : 300 sec :   153.600 GB :  :  &cw : 1;
      station = Mp : 11 sec : 300 sec :   153.600 GB :  :  &cw : 1;
-     station = Ho : 18 sec : 300 sec :   153.846 GB :  :      : 1;
-     station = Cd : 27 sec : 300 sec :   153.846 GB :  :  &cw : 1;
+     station = Ho : 14 sec : 300 sec :   153.846 GB :  :      : 1;
+     station = Cd : 19 sec : 300 sec :   153.846 GB :  :  &cw : 1;
      station = Ww :  5 sec : 300 sec :   153.846 GB :  : &ccw : 1;
      station = Ke :  4 sec : 300 sec :   153.846 GB :  : &ccw : 1;
      station = Yg :  4 sec : 300 sec :   153.846 GB :  : &ccw : 1;
@@ -856,8 +847,8 @@ scan No0013;
      station = Pa : 23 sec : 300 sec :   180.480 GB :  : &ccw : 1;
      station = At : 11 sec : 300 sec :   180.480 GB :  :  &cw : 1;
      station = Mp : 11 sec : 300 sec :   180.480 GB :  :  &cw : 1;
-     station = Ho : 18 sec : 300 sec :   180.769 GB :  :      : 1;
-     station = Cd : 27 sec : 300 sec :   180.769 GB :  :  &cw : 1;
+     station = Ho : 14 sec : 300 sec :   180.769 GB :  :      : 1;
+     station = Cd : 19 sec : 300 sec :   180.769 GB :  :  &cw : 1;
      station = Ww :  5 sec : 300 sec :   180.769 GB :  : &ccw : 1;
      station = Ke :  4 sec : 300 sec :   180.769 GB :  : &ccw : 1;
      station = Yg :  4 sec : 300 sec :   180.769 GB :  : &ccw : 1;
@@ -890,8 +881,8 @@ scan No0015;
      station = Pa : 22 sec : 300 sec :   207.360 GB :  : &ccw : 1;
      station = At : 11 sec : 300 sec :   207.360 GB :  :  &cw : 1;
      station = Mp : 11 sec : 300 sec :   207.360 GB :  :  &cw : 1;
-     station = Ho : 18 sec : 300 sec :   207.692 GB :  :      : 1;
-     station = Cd : 26 sec : 300 sec :   207.692 GB :  :  &cw : 1;
+     station = Ho : 14 sec : 300 sec :   207.692 GB :  :      : 1;
+     station = Cd : 19 sec : 300 sec :   207.692 GB :  :  &cw : 1;
      station = Ww :  5 sec : 300 sec :   207.692 GB :  : &ccw : 1;
      station = Ke :  4 sec : 300 sec :   207.692 GB :  : &ccw : 1;
      station = Yg :  4 sec : 300 sec :   207.692 GB :  : &ccw : 1;
@@ -924,8 +915,8 @@ scan No0017;
      station = Pa : 22 sec : 300 sec :   234.240 GB :  : &ccw : 1;
      station = At : 11 sec : 300 sec :   234.240 GB :  :  &cw : 1;
      station = Mp : 11 sec : 300 sec :   234.240 GB :  :  &cw : 1;
-     station = Ho : 18 sec : 300 sec :   234.615 GB :  :      : 1;
-     station = Cd : 26 sec : 300 sec :   234.615 GB :  :  &cw : 1;
+     station = Ho : 14 sec : 300 sec :   234.615 GB :  :      : 1;
+     station = Cd : 19 sec : 300 sec :   234.615 GB :  :  &cw : 1;
      station = Ww :  5 sec : 300 sec :   234.615 GB :  : &ccw : 1;
      station = Ke :  4 sec : 300 sec :   234.615 GB :  : &ccw : 1;
      station = Yg :  4 sec : 300 sec :   234.615 GB :  : &ccw : 1;
@@ -958,8 +949,8 @@ scan No0019;
      station = Pa : 22 sec : 300 sec :   261.120 GB :  : &ccw : 1;
      station = At : 11 sec : 300 sec :   261.120 GB :  :  &cw : 1;
      station = Mp : 11 sec : 300 sec :   261.120 GB :  :  &cw : 1;
-     station = Ho : 18 sec : 300 sec :   261.538 GB :  :      : 1;
-     station = Cd : 26 sec : 300 sec :   261.538 GB :  :  &cw : 1;
+     station = Ho : 14 sec : 300 sec :   261.538 GB :  :      : 1;
+     station = Cd : 19 sec : 300 sec :   261.538 GB :  :  &cw : 1;
      station = Ww :  5 sec : 300 sec :   261.538 GB :  : &ccw : 1;
      station = Ke :  4 sec : 300 sec :   261.538 GB :  : &ccw : 1;
      station = Yg :  5 sec : 300 sec :   261.538 GB :  : &ccw : 1;
@@ -992,8 +983,8 @@ scan No0021;
      station = Pa : 22 sec : 300 sec :   288.000 GB :  : &ccw : 1;
      station = At : 10 sec : 300 sec :   288.000 GB :  :  &cw : 1;
      station = Mp : 11 sec : 300 sec :   288.000 GB :  :  &cw : 1;
-     station = Ho : 18 sec : 300 sec :   288.461 GB :  :      : 1;
-     station = Cd : 26 sec : 300 sec :   288.461 GB :  :  &cw : 1;
+     station = Ho : 14 sec : 300 sec :   288.461 GB :  :      : 1;
+     station = Cd : 19 sec : 300 sec :   288.461 GB :  :  &cw : 1;
      station = Ww :  5 sec : 300 sec :   288.461 GB :  : &ccw : 1;
      station = Ke :  4 sec : 300 sec :   288.461 GB :  : &ccw : 1;
      station = Yg :  5 sec : 300 sec :   288.461 GB :  : &ccw : 1;
@@ -1026,8 +1017,8 @@ scan No0023;
      station = Pa : 21 sec : 300 sec :   314.880 GB :  : &ccw : 1;
      station = At : 10 sec : 300 sec :   314.880 GB :  :  &cw : 1;
      station = Mp : 10 sec : 300 sec :   314.880 GB :  :  &cw : 1;
-     station = Ho : 18 sec : 300 sec :   315.384 GB :  :      : 1;
-     station = Cd : 25 sec : 300 sec :   315.384 GB :  :  &cw : 1;
+     station = Ho : 14 sec : 300 sec :   315.384 GB :  :      : 1;
+     station = Cd : 18 sec : 300 sec :   315.384 GB :  :  &cw : 1;
      station = Ww :  5 sec : 300 sec :   315.384 GB :  : &ccw : 1;
      station = Ke :  4 sec : 300 sec :   315.384 GB :  : &ccw : 1;
      station = Yg :  5 sec : 300 sec :   315.384 GB :  : &ccw : 1;
@@ -1060,8 +1051,8 @@ scan No0025;
      station = Pa : 21 sec : 300 sec :   341.760 GB :  : &ccw : 1;
      station = At : 10 sec : 300 sec :   341.760 GB :  :  &cw : 1;
      station = Mp : 10 sec : 300 sec :   341.760 GB :  :  &cw : 1;
-     station = Ho : 18 sec : 300 sec :   342.307 GB :  :      : 1;
-     station = Cd : 25 sec : 300 sec :   342.307 GB :  :  &cw : 1;
+     station = Ho : 14 sec : 300 sec :   342.307 GB :  :      : 1;
+     station = Cd : 18 sec : 300 sec :   342.307 GB :  :  &cw : 1;
      station = Ww :  5 sec : 300 sec :   342.307 GB :  : &ccw : 1;
      station = Ke :  4 sec : 300 sec :   342.307 GB :  : &ccw : 1;
      station = Yg :  5 sec : 300 sec :   342.307 GB :  : &ccw : 1;
@@ -1094,8 +1085,8 @@ scan No0027;
      station = Pa : 21 sec : 300 sec :   368.640 GB :  : &ccw : 1;
      station = At : 10 sec : 300 sec :   368.640 GB :  :  &cw : 1;
      station = Mp : 10 sec : 300 sec :   368.640 GB :  :  &cw : 1;
-     station = Ho : 18 sec : 300 sec :   369.230 GB :  :      : 1;
-     station = Cd : 25 sec : 300 sec :   369.230 GB :  :  &cw : 1;
+     station = Ho : 14 sec : 300 sec :   369.230 GB :  :      : 1;
+     station = Cd : 18 sec : 300 sec :   369.230 GB :  :  &cw : 1;
      station = Ww :  5 sec : 300 sec :   369.230 GB :  : &ccw : 1;
      station = Ke :  4 sec : 300 sec :   369.230 GB :  : &ccw : 1;
      station = Yg :  5 sec : 300 sec :   369.230 GB :  : &ccw : 1;
@@ -1128,8 +1119,8 @@ scan No0029;
      station = Pa : 20 sec : 300 sec :   395.520 GB :  : &ccw : 1;
      station = At : 10 sec : 300 sec :   395.520 GB :  :  &cw : 1;
      station = Mp : 10 sec : 300 sec :   395.520 GB :  :  &cw : 1;
-     station = Ho : 18 sec : 300 sec :   396.153 GB :  :      : 1;
-     station = Cd : 24 sec : 300 sec :   396.153 GB :  :  &cw : 1;
+     station = Ho : 13 sec : 300 sec :   396.153 GB :  :      : 1;
+     station = Cd : 18 sec : 300 sec :   396.153 GB :  :  &cw : 1;
      station = Ww :  5 sec : 300 sec :   396.153 GB :  : &ccw : 1;
      station = Ke :  5 sec : 300 sec :   396.153 GB :  : &ccw : 1;
      station = Yg :  5 sec : 300 sec :   396.153 GB :  : &ccw : 1;
@@ -1162,8 +1153,8 @@ scan No0031;
      station = Pa : 20 sec : 300 sec :   422.400 GB :  : &ccw : 1;
      station = At : 10 sec : 300 sec :   422.400 GB :  :  &cw : 1;
      station = Mp : 10 sec : 300 sec :   422.400 GB :  :  &cw : 1;
-     station = Ho : 18 sec : 300 sec :   423.076 GB :  :      : 1;
-     station = Cd : 24 sec : 300 sec :   423.076 GB :  :  &cw : 1;
+     station = Ho : 13 sec : 300 sec :   423.076 GB :  :      : 1;
+     station = Cd : 17 sec : 300 sec :   423.076 GB :  :  &cw : 1;
      station = Ww :  5 sec : 300 sec :   423.076 GB :  : &ccw : 1;
      station = Ke :  5 sec : 300 sec :   423.076 GB :  : &ccw : 1;
      station = Yg :  5 sec : 300 sec :   423.076 GB :  : &ccw : 1;
@@ -1196,8 +1187,8 @@ scan No0033;
      station = Pa : 20 sec : 300 sec :   449.280 GB :  : &ccw : 1;
      station = At : 10 sec : 300 sec :   449.280 GB :  :  &cw : 1;
      station = Mp : 10 sec : 300 sec :   449.280 GB :  :  &cw : 1;
-     station = Ho : 18 sec : 300 sec :   449.999 GB :  :      : 1;
-     station = Cd : 24 sec : 300 sec :   449.999 GB :  :  &cw : 1;
+     station = Ho : 13 sec : 300 sec :   449.999 GB :  :      : 1;
+     station = Cd : 17 sec : 300 sec :   449.999 GB :  :  &cw : 1;
      station = Ww :  5 sec : 300 sec :   449.999 GB :  : &ccw : 1;
      station = Ke :  5 sec : 300 sec :   449.999 GB :  : &ccw : 1;
      station = Yg :  5 sec : 300 sec :   449.999 GB :  : &ccw : 1;
@@ -1230,8 +1221,8 @@ scan No0035;
      station = Pa : 20 sec : 300 sec :   476.160 GB :  : &ccw : 1;
      station = At : 10 sec : 300 sec :   476.160 GB :  :  &cw : 1;
      station = Mp : 10 sec : 300 sec :   476.160 GB :  :  &cw : 1;
-     station = Ho : 18 sec : 300 sec :   476.922 GB :  :      : 1;
-     station = Cd : 23 sec : 300 sec :   476.922 GB :  :  &cw : 1;
+     station = Ho : 13 sec : 300 sec :   476.922 GB :  :      : 1;
+     station = Cd : 17 sec : 300 sec :   476.922 GB :  :  &cw : 1;
      station = Ww :  4 sec : 300 sec :   476.922 GB :  : &ccw : 1;
      station = Ke :  5 sec : 300 sec :   476.922 GB :  : &ccw : 1;
      station = Yg :  5 sec : 300 sec :   476.922 GB :  : &ccw : 1;

@@ -253,10 +253,10 @@ SOURCE SCAN SUMMARY FOR SOURCES LISTED ABOVE
      Baseline hours are only counted for scans above horizon at both ends.
   Source       Setup file             Frequency sets                  Observing hours
                                    (duplicates not shown)              Scan  Baseline
-  0437-454   ups/lba3cm-2p-4IF.set 1 2 4 5 6 7 9                     0.633    18.200
-  0438-436   ups/lba3cm-2p-4IF.set 1 2 4 5 6 7 9                     0.800    26.296
-  0454-463   ups/lba3cm-2p-4IF.set 1 2 4 5 6 7 9                     0.033     1.200
-  0537-441   ups/lba3cm-2p-4IF.set 1 2 4 5 6 7 9                     0.333    10.653
+  0437-454   ups/lba3cm-2p-4IF.set 1 2 4 5 6 7 8 9                   0.633    18.503
+  0438-436   ups/lba3cm-2p-4IF.set 1 2 4 5 6 7 8 9                   0.800    26.473
+  0454-463   ups/lba3cm-2p-4IF.set 1 2 4 5 6 7 8 9                   0.033     1.200
+  0537-441   ups/lba3cm-2p-4IF.set 1 2 4 5 6 7 8 9                   0.333    10.653
 
 
 EFFECT OF SOLAR CORONA
