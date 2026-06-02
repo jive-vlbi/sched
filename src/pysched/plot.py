@@ -88,7 +88,8 @@ else:
 
 
 # list of colors to cycle through
-color_list = [to_hex(c) for c in "bgrcmyk"] + ["orange", "brown"] 
+color_list = [tuple(map(lambda x: round(x * 255), matplotlib.cm.tab20(i)))
+              for i in itertools.chain(range(0, 20, 2), range(1, 20, 2))]
 
 @contextmanager
 def wait_cursor():
@@ -508,7 +509,7 @@ class StationsWidget(QGroupBox):
             stations_layout.addWidget(checkbox, row, 1)
 
             color = ColorButton(stations_widget)
-            color.set_color(QColor(next(color_cycle)))
+            color.set_color(QColor(*next(color_cycle)))
             self.color_button[name] = color
             stations_layout.addWidget(color, row, 2)
 
@@ -706,7 +707,7 @@ class RADecWidget(QWidget):
             else:
                 marker = next(marker_cycle)
             widgets["Marker"].setCurrentText(marker)
-            widgets["Color"].set_color(QColor(next(color_cycle)))
+            widgets["Color"].set_color(QColor(*next(color_cycle)))
 
 class BeamWidget(QWidget):
     def get_source(self):
