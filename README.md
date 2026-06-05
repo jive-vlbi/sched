@@ -78,20 +78,19 @@ sudo apt-get install python3-pip
 If you are encountering issues (both during installation or while running) with pySCHED, please check the [Discussions page](https://github.com/jive-vlbi/sched/discussions). We are summarizing here the most-common problems and how to solve them.
 
 ## Update
-
-The command to update pySCHED is:
-
-```bash
-sudo pip3 install --upgrade pythonSCHED
-```
-
-Or when using a conda installation:
+    
+The command to update pySCHED is, when using a conda installation:
 
 ```bash
 conda activate pySCHED
 pip install --upgrade pythonSCHED
 ```
 
+Or when pySCHED is installed outside of a virtual environment:
+
+```bash
+sudo pip3 install --upgrade pythonSCHED
+```
 
 
 ## Usage
@@ -176,6 +175,7 @@ We therefore recommend to unset this variable before running pySCHED (which woul
 * __v1.28.2 (2025-08-21)__: Fixed bug: a parameter to the Fortran function plbeam changed in size, but the call wasn't updated alongside.
 * __v1.28.3 (2025-10-15)__: Fixed bug: VEXVRSN keyword was parsed as a number but handled as if it always was a string.
 * __v1.28.4 (2026-04-29)__: Fixed bug: while writing the .sum file, tried to access setups for TSCAL values from the frequency catalog, even when no setup was used.
+* __v1.28.5 (2026-05-29)__: 1) When multiple stations use the same STCODE value, throw an error, instead of creating a VEX file that doesn't make much sense. 2) Improved default colors for plots to be more distinctive.
 
 
 # Contact
