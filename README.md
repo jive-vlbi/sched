@@ -176,6 +176,7 @@ We therefore recommend to unset this variable before running pySCHED (which woul
 * __v1.28.3 (2025-10-15)__: Fixed bug: VEXVRSN keyword was parsed as a number but handled as if it always was a string.
 * __v1.28.4 (2026-04-29)__: Fixed bug: while writing the .sum file, tried to access setups for TSCAL values from the frequency catalog, even when no setup was used.
 * __v1.28.5 (2026-05-29)__: 1) When multiple stations use the same STCODE value, throw an error, instead of creating a VEX file that doesn't make much sense. 2) Improved default colors for plots to be more distinctive.
+* __v1.28.6 (2026-09-15)__: Make the code compatible with compilers implementing the Fortran 2023 standard.
 
 
 # Contact
