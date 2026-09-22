@@ -169,7 +169,7 @@ SETUP FILE INFORMATION:
    Matching groups in /home/eldering/sched/catalogs/freq_RDBE.dat:
      hh4cm_g         Generated from evn4cm-4Gbps-32MHz.set
 
-   Setup group:    8         Station: HART              Total bit rate:   512
+   Setup group:    7         Station: HART              Total bit rate:   512
    Format: MARK5B            Bits per sample: 2         Sample rate: 32.000
    Number of channels:  8    DBE type: DBBC_DDC         Speedup factor:   1.00
 

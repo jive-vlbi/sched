@@ -1,11 +1,11 @@
 VEX_rev = 2.0;
-*    pySCHED version: 1.28.5
+*    pySCHED version: 1.29.0
 *    SCHED version:   Release 12.0; March 2025
 *    VEX/SCHED:       2.0.5
 *    Other versions: Sched:  12.0 JPL-ephem: 1.01
 *    Catalog versions:
-*       Frequency: 2026May21-10:03:53
-*       Station:   2026May07-13:48:02
+*       Frequency: 2026Jun05-13:46:00
+*       Station:   2026Jul21-13:16:08
 *       Location:  2020Jan12
 *------------------------------------------------------------------------------
 $GLOBAL;
@@ -66,7 +66,8 @@ def lba3cm-2p-4IF;
      ref $IF = LO@8100MHzDPolNoTone:Pa;
      ref $IF = LO@8800MHzDPolNoTone:Ho;
      ref $IF = LO@9040MHzDPolNoTone:Cd;
-     ref $BBC = 4BBCs:Ak:At:Mp:Pa;
+     ref $BBC = 2BBCs:Ak;
+     ref $BBC = 4BBCs:At:Mp:Pa;
      ref $BBC = 4BBCs#02:Ke;
      ref $BBC = 4BBCs#03:Yg;
      ref $BBC = 8BBCs:Cd;
@@ -74,11 +75,13 @@ def lba3cm-2p-4IF;
      ref $BBC = 8BBCs#03:Ho;
      ref $BBC = 8BBCs#04:Ww;
      ref $PHASE_CAL_DETECT = NoDetect:Ak:At:Cd:Hh:Ho:Ke:Mp:Pa:Ww:Yg;
+     ref $FREQ = 8409MHz2x64MHz:Ak;
      ref $FREQ = 8409MHz4x32MHz:Ke:Yg;
-     ref $FREQ = 8409MHz8x16MHz:Ak:At:Mp:Pa;
+     ref $FREQ = 8409MHz8x16MHz:At:Mp:Pa;
      ref $FREQ = 8409MHz8x16MHz#02:Cd:Ww;
      ref $FREQ = 8409MHz8x16MHz#03:Hh:Ho;
-     ref $TRACKS = LBA_AT.8Ch2bit1to1:Ak:At:Mp:Pa;
+     ref $TRACKS = LBA_AT.2Ch2bit1to1:Ak;
+     ref $TRACKS = LBA_AT.8Ch2bit1to1:At:Mp:Pa;
      ref $BITSTREAMS = BS4Ch2Bit:Ke:Yg;
      ref $BITSTREAMS = BS8Ch2Bit:Cd:Ho;
      ref $BITSTREAMS = BS8Ch2Bit#02:Hh:Ww;
@@ -142,8 +145,14 @@ enddef;
 *------------------------------------------------------------------------------
 $BBC;
 *
+def 2BBCs;
+* lba3cm-2p-4IF: Ak
+     BBC_assign = &BBC01 : 1 : &IF_2N;
+     BBC_assign = &BBC02 : 2 : &IF_1N;
+enddef;
+*
 def 4BBCs;
-* lba3cm-2p-4IF: Ak, At, Mp, Pa
+* lba3cm-2p-4IF: At, Mp, Pa
      BBC_assign = &BBC01 : 1 : &IF_2N;
      BBC_assign = &BBC02 : 2 : &IF_1N;
      BBC_assign = &BBC03 : 3 : &IF_2N;
@@ -223,6 +232,12 @@ enddef;
 *------------------------------------------------------------------------------
 $FREQ;
 *
+def 8409MHz2x64MHz;
+* lba3cm-2p-4IF: Ak
+     chan_def =  : 8409 MHz : U :   64.00 MHz : &CH01 : &BBC01 : &NoCal; * RCP
+     chan_def =  : 8409 MHz : U :   64.00 MHz : &CH02 : &BBC02 : &NoCal; * LCP
+enddef;
+*
 def 8409MHz4x32MHz;
 * lba3cm-2p-4IF: Ke, Yg
      chan_def =  : 8409 MHz : U :   32.00 MHz : &CH01 : &BBC01 : &NoCal; * RCP
@@ -232,7 +247,7 @@ def 8409MHz4x32MHz;
 enddef;
 *
 def 8409MHz8x16MHz;
-* lba3cm-2p-4IF: Ak, At, Mp, Pa
+* lba3cm-2p-4IF: At, Mp, Pa
      chan_def =  : 8409 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &NoCal; * RCP
      chan_def =  : 8409 MHz : U :   16.00 MHz : &CH02 : &BBC02 : &NoCal; * LCP
      chan_def =  : 8425 MHz : U :   16.00 MHz : &CH03 : &BBC01 : &NoCal; * RCP
@@ -269,8 +284,18 @@ enddef;
 *------------------------------------------------------------------------------
 $TRACKS;
 *
+def LBA_AT.2Ch2bit1to1;
+* lba3cm-2p-4IF: Ak
+     track_frame_format = LBA_AT;
+     sample_rate = 128.000 Ms/sec;
+     fanout_def =  : &CH01 : sign : 1 : 0;
+     fanout_def =  : &CH01 :  mag : 1 : 1;
+     fanout_def =  : &CH02 : sign : 1 : 2;
+     fanout_def =  : &CH02 :  mag : 1 : 3;
+enddef;
+*
 def LBA_AT.8Ch2bit1to1;
-* lba3cm-2p-4IF: Ak, At, Mp, Pa
+* lba3cm-2p-4IF: At, Mp, Pa
      track_frame_format = LBA_AT;
      sample_rate =  32.000 Ms/sec;
      fanout_def =  : &CH01 : sign : 1 :  0;

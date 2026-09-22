@@ -41,9 +41,9 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell   GBytes    SY
 
  --- Thu  10 Dec 2009   Day 344 ---
 
- Next scan frequencies:  8409.00  8409.00  8425.00  8425.00  8441.00  8441.00  8457.00  8457.00
- Next BBC frequencies:    409.00   409.00   425.00   425.00   441.00   441.00   457.00   457.00
- Next scan bandwidths:     16.00    16.00    16.00    16.00    16.00    16.00    16.00    16.00
+ Next scan frequencies:  8409.00  8409.00
+ Next BBC frequencies:    409.00   409.00
+ Next scan bandwidths:     64.00    64.00
 
 15 00 00  0537-441     04 04 31  64.2 138.5 -1.6     -55.5     0        0   15 00 00
 15 10 00  ---          04 14 33  65.7 141.0 -1.4     -51.5   600       38   15 00 01
@@ -193,30 +193,30 @@ SETUP FILE INFORMATION:
    Matching groups in /home/eldering/sched/catalogs/freq_RDBE.dat:
      ak3cm           Not actual values
 
-   Setup group:    7         Station: ASKAP             Total bit rate:   512
-   Format: LBA               Bits per sample: 2         Sample rate: 32.000
-   Number of channels:  8    DBE type:                  Speedup factor:   1.00
+   Setup group:    8         Station: ASKAP             Total bit rate:   512
+   Format: LBA               Bits per sample: 2         Sample rate:128.000
+   Number of channels:  2    DBE type:                  Speedup factor:   1.00
 
    Disk used to record data.
 
-   1st LO=   8000.00   8000.00   8000.00   8000.00   8000.00   8000.00   8000.00   8000.00
-   Net SB=         U         U         U         U         U         U         U         U
-   IF SB =         U         U         U         U         U         U         U         U
-   Pol.  =      RCP       LCP       RCP       LCP       RCP       LCP       RCP       LCP 
-   BBC   =         1         2         1         2         3         4         3         4
-   BBC SB=         U         U         U         U         U         U         U         U
-   IF    =        2N        1N        2N        1N        2N        1N        2N        1N
+   1st LO=   8000.00   8000.00
+   Net SB=         U         U
+   IF SB =         U         U
+   Pol.  =      RCP       LCP 
+   BBC   =         1         2
+   BBC SB=         U         U
+   IF    =        2N        1N
 
   The following frequency sets based on these setups were used.
 
    Frequency Set:   9  Setup file default.  Used with PCAL = off
-   LO sum=   8409.00  8409.00  8425.00  8425.00  8441.00  8441.00  8457.00  8457.00
-   BBC fr=    409.00   409.00   425.00   425.00   441.00   441.00   457.00   457.00
-   Bandwd=     16.00    16.00    16.00    16.00    16.00    16.00    16.00    16.00
+   LO sum=   8409.00  8409.00
+   BBC fr=    409.00   409.00
+   Bandwd=     64.00    64.00
     Matching frequency sets:   9
 
    Track assignments are: 
-    track1=   0,  4,  2,  6,  8, 12, 10, 14
+    track1=   0,  2
     barrel=roll_off 
 
  POSITIONS OF SOURCES USED IN RECORDING SCANS
