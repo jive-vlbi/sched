@@ -246,10 +246,8 @@ def modes_block(vex_version, print_warnings):
         return if_, if_channel
         
     def do_bbc(setup, if_, if_channel):
-        # BBC numbers brought into range 1-16 for drudg
         bbc_channel = OrderedDict(
-            [((bbc - 1) % 16 + 1, channel) 
-             for channel, bbc in enumerate(setup.bbc)])
+            [(bbc, channel) for channel, bbc in enumerate(setup.bbc)])
         bbc = tuple(("BBC_assign",
                      "&BBC{:02d}".format(bbc_number),
                      bbc_number,
