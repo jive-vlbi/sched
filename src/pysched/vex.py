@@ -982,7 +982,8 @@ def stations_block(vex_version, print_warnings):
                         ("antenna_motion", axes[1], 
                          "{:6.1f} deg/min".format(station.ax2rate),
                          "{} sec".format(int(station.tsettle))))
-            if (station.mount == "ALTAZ"):
+            if ((station.mount == "ALTAZ") and
+                (station.station[:3] not in ("GBT", "VLA", "KVN"))):
                 antenna += pointing_sectors(station, vex_version, 
                                             print_warnings)
             
